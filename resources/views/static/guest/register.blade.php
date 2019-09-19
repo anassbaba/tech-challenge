@@ -15,6 +15,7 @@
 			@endif
 
 			@csrf
+			
 			<input type="text" name="email" placeholder="Email adress">
 			<input type="password" name="password" placeholder="Password">
 			<input type="password" name="password_confirmation" placeholder="Password confirmation">

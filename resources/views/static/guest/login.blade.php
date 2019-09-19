@@ -5,7 +5,7 @@
 @section('page-content')
 
 	<div class="login">
-		<form>
+		<form method="POST" action="{{ route('static.guest.login.auth') }}">
 			@if ($errors->any())
 			<div class="errors">
 				@foreach ($errors->all() as $error)
@@ -25,7 +25,9 @@
 				<span style="color:green">- {{ session('success') }}</span>
 			</div>
 			@endif
-
+            
+            @csrf
+            
 			<input type="text" name="email" placeholder="Email adress">
 			<input type="password" name="password" placeholder="Password">
 			<input type="submit" name="submit" value="Login">

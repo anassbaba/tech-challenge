@@ -51,7 +51,7 @@ class RegisterController extends Controller
     		return redirect()->to('login')->with(['error' => 'email verification hash is expired we sent you an other.']);
     	}
 
-    	if($hash == $checkHash && $user->email_verified_at != null)
+    	if($hash == $checkHash && $user->email_verified_at == null)
     	{
     		$user->update([
     			'email_verified_at' => Carbon::now()
