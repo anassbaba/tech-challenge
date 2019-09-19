@@ -11,6 +11,7 @@
 |
 */
 
+
 Route::group(['prefix' => '/', 'namespace' => 'Api', 'as' => 'static'], function () 
 {
 	
@@ -18,10 +19,12 @@ Route::group(['prefix' => '/', 'namespace' => 'Api', 'as' => 'static'], function
 	{
 		Route::get('/wall', 'WallController@index')->name('.wall');
 		Route::get('/login', 'LoginController@index')->name('.login');
+		Route::post('/login', 'LoginController@auth')->name('.login.auth');
 
 		//register
 		Route::get('/register', 'RegisterController@index')->name('.register');
 		Route::post('/register', 'RegisterController@register')->name('.register');
+		Route::get('/email/verify/{id}/{hash}', 'RegisterController@verify')->name('.register.verify');
 
 		Route::get('/reset-password', 'ResetPasswordController@index')->name('.reset-password');
 	});

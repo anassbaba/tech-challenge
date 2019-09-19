@@ -11,4 +11,9 @@ class LoginController extends Controller
     {
     	return view('static.guest.login');
     }
+
+    public function auth(Request $request)
+    {
+    	
+    }
 }

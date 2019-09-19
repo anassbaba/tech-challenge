@@ -6,9 +6,26 @@
 
 	<div class="login">
 		<form>
+			@if ($errors->any())
 			<div class="errors">
-				<span>- Wrong email or password.</span>
+				@foreach ($errors->all() as $error)
+                	<span>- {{ $error }}</span>
+            	@endforeach
 			</div>
+			@endif
+
+			@if (session('error') != null)
+			<div class="errors">
+				<span>- {{ session('error') }}</span>
+			</div>
+			@endif
+
+			@if (session('success') != null)
+			<div class="errors">
+				<span style="color:green">- {{ session('success') }}</span>
+			</div>
+			@endif
+
 			<input type="text" name="email" placeholder="Email adress">
 			<input type="password" name="password" placeholder="Password">
 			<input type="submit" name="submit" value="Login">
