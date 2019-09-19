@@ -32,7 +32,6 @@
 			<input type="password" name="password" placeholder="Password">
 			<input type="submit" name="submit" value="Login">
 			<span class="divider"></span>
-			<span>- <a href="{{ route('static.guest.reset-password') }}">Reset password</a></span>
 			<span>- <a href="{{ route('static.guest.register') }}">Register</a></span>
 		</form>
 	</div>

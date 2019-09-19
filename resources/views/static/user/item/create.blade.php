@@ -6,13 +6,20 @@
 
 	<div class="wall card-container">
 		<div class="card">
-			<form>
+			<form method="POST" action="{{ route('static.user.item.create') }}" enctype="multipart/form-data">
+				
+				@if ($errors->any())
 				<div class="errors">
-					<span>- Wrong email or password.</span>
+					@foreach ($errors->all() as $error)
+                		<span>- {{ $error }}</span>
+            		@endforeach
 				</div>
+				@endif
+
+				@csrf
 				<input type="file" name="image" placeholder="Upload image">
 				<input type="text" name="title" placeholder="Item title">
-				<textarea name="message" rows="10" cols="30" placeholder="Item Description"></textarea>
+				<textarea name="description" rows="10" cols="30" placeholder="Item Description"></textarea>
 				<input type="submit" name="create" value="Create">
 			</form>
 		</div>

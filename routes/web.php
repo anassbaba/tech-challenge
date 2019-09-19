@@ -13,7 +13,7 @@
 
 
 Route::group(['prefix' => '/', 'namespace' => 'Api', 'as' => 'static'], function () 
-{
+{ 
 	
 	Route::group(['prefix' => '/', 'namespace' => 'Guest', 'as' => '.guest'], function () 
 	{
@@ -28,9 +28,6 @@ Route::group(['prefix' => '/', 'namespace' => 'Api', 'as' => 'static'], function
 			Route::get('/register', 'RegisterController@index')->name('.register');
 			Route::post('/register', 'RegisterController@register')->name('.register');
 			Route::get('/email/verify/{id}/{hash}', 'RegisterController@verify')->name('.register.verify');
-			
-			//reset password
-			Route::get('/reset-password', 'ResetPasswordController@index')->name('.reset-password');
 		});
 
 			Route::get('/wall', 'WallController@index')->name('.wall');
@@ -49,8 +46,11 @@ Route::group(['prefix' => '/', 'namespace' => 'Api', 'as' => 'static'], function
 		Route::group(['prefix' => '/item', 'namespace' => 'Item', 'as' => '.item'], function () 
 		{
 			Route::get('/all', 'AllController@index')->name('.all');
+
 			Route::get('/create', 'CreateController@index')->name('.create');
-			Route::get('/edit', 'EditController@index')->name('.edit');
+			Route::post('/create', 'CreateController@new')->name('.create');
+
+			Route::get('/remove/{id}', 'CreateController@remove')->name('.remove');
 		});
 	});
 });
