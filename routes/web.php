@@ -18,5 +18,6 @@ Route::group(['prefix' => '/', 'namespace' => '_Static', 'as' => 'static'], func
 	{
 		Route::get('/login', 'LoginController@index')->name('.login');
 		Route::get('/register', 'RegisterController@index')->name('.register');
+		Route::get('/reset-password', 'ResetPasswordController@index')->name('.reset-password');
 	});
 });
