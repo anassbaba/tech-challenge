@@ -8,7 +8,6 @@
 		<form>
 		<div class="errors">
 			<span>- Wrong email or password.</span>
-			<span>- hello world error</span>
 		</div>
 			<input type="text" name="email" placeholder="Email adress">
 			<input type="password" name="password" placeholder="Password">

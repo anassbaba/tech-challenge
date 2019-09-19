@@ -1,6 +1,6 @@
 @extends('static._layout.master')
 
-@section('title', 'Login')
+@section('title', 'Reset Password')
 
 @section('page-content')
 

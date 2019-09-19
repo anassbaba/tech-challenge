@@ -1,3 +1,33 @@
+.wall {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+  display: grid;
+  grid-gap: 20px;
+}
+.wall .card-info {
+  font-size: 10px;
+}
+.wall .card-info .date {
+  float: right;
+  color: gray;
+}
+.wall .card {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+  display: grid;
+  grid-gap: 10px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+  transition: box-shadow 0.1s ease, transform 0.1s ease;
+}
+.wall .card img {
+  width: 100%;
+}
+.wall .card p {
+  font-size: 12px;
+}
 .login {
   margin: auto;
   width: 50%;
