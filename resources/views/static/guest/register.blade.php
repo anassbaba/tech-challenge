@@ -12,7 +12,6 @@
 			<input type="submit" name="submit" value="Register">
 			<span class="divider"></span>
 			<span>- Already member: <a href="{{ route('static.guest.login') }}">login</a></span>
-			<span>- <a href="#">Reset password</a></span>
 		</form>
 	</div>
 
