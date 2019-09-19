@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\_Static\User\Item;
+namespace App\Http\Controllers\Api\User\Item;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

@@ -7,6 +7,37 @@
 //User
 @import './user/item/create.less';
 
+body{
+	font-family: monospace;
+}
+
+.logged-in{
+    grid-template-columns: 145px;
+}
+
+.app{
+	margin: auto;
+    width: 50%;
+    padding: 10px;
+    display: grid;
+    grid-auto-flow: column;
+	.menu{
+		color: gray;
+		.user{
+			font-size: 8px;
+		}
+		div{
+			margin-bottom: 12px;
+			a{
+				font-size: 12px;
+				padding-left: 20px;
+				text-decoration: none;
+				color: blue;
+			}
+		}
+	}
+}
+
 form{
 	.errors{
 		display: grid;

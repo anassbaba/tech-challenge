@@ -11,14 +11,18 @@
 |
 */
 
-Route::group(['prefix' => '/', 'namespace' => '_Static', 'as' => 'static'], function () 
+Route::group(['prefix' => '/', 'namespace' => 'Api', 'as' => 'static'], function () 
 {
 	
 	Route::group(['prefix' => '/', 'namespace' => 'Guest', 'as' => '.guest'], function () 
 	{
 		Route::get('/wall', 'WallController@index')->name('.wall');
 		Route::get('/login', 'LoginController@index')->name('.login');
+
+		//register
 		Route::get('/register', 'RegisterController@index')->name('.register');
+		Route::post('/register', 'RegisterController@register')->name('.register');
+
 		Route::get('/reset-password', 'ResetPasswordController@index')->name('.reset-password');
 	});
 
@@ -32,8 +36,8 @@ Route::group(['prefix' => '/', 'namespace' => '_Static', 'as' => 'static'], func
 		Route::group(['prefix' => '/item', 'namespace' => 'Item', 'as' => '.item'], function () 
 		{
 			Route::get('/all', 'AllController@index')->name('.all');
-			Route::get('/create', 'CreateController@index')->name('.wall');
-			Route::get('/edit', 'EditController@index')->name('.login');
+			Route::get('/create', 'CreateController@index')->name('.create');
+			Route::get('/edit', 'EditController@index')->name('.edit');
 		});
 	});
 });
