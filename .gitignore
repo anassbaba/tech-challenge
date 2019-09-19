@@ -1,5 +1,6 @@
 /node_modules
 /public/storage
+/public/mix-manifest.json
 /storage/*.key
 /vendor
 .phpunit.result.cache
