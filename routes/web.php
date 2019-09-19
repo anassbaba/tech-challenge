@@ -22,7 +22,7 @@ Route::group(['prefix' => '/', 'namespace' => 'Api', 'as' => 'static'], function
  			
  			//login
 			Route::get('/login', 'LoginController@index')->name('.login');
-			Route::post('/login', 'LoginController@auth')->name('.login.auth');
+			Route::post('/login', 'LoginController@auth')->name('.login');
 		
 			//register
 			Route::get('/register', 'RegisterController@index')->name('.register');
@@ -43,6 +43,7 @@ Route::group(['prefix' => '/', 'namespace' => 'Api', 'as' => 'static'], function
 		Route::group(['prefix' => '/account', 'namespace' => 'Account', 'as' => '.account'], function () 
 		{
 			Route::get('/update-password', 'UpdatePasswordController@index')->name('.update-password');
+			Route::post('/update-password', 'UpdatePasswordController@update')->name('.update-password');
 		});
 
 		Route::group(['prefix' => '/item', 'namespace' => 'Item', 'as' => '.item'], function () 

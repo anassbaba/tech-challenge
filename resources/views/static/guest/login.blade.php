@@ -5,7 +5,7 @@
 @section('page-content')
 
 	<div class="login">
-		<form method="POST" action="{{ route('static.guest.login.auth') }}">
+		<form method="POST" action="{{ route('static.guest.login') }}">
 			@if ($errors->any())
 			<div class="errors">
 				@foreach ($errors->all() as $error)
