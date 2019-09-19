@@ -11,6 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['prefix' => '/', 'namespace' => '_Static'], function () 
+{
+	
+	Route::group(['prefix' => '/', 'namespace' => 'Guest'], function () 
+	{
+		Route::get('/', 'LoginController@index')->name('index');
+	});
 });
