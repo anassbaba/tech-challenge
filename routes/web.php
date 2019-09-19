@@ -11,11 +11,12 @@
 |
 */
 
-Route::group(['prefix' => '/', 'namespace' => '_Static'], function () 
+Route::group(['prefix' => '/', 'namespace' => '_Static', 'as' => 'static'], function () 
 {
 	
-	Route::group(['prefix' => '/', 'namespace' => 'Guest'], function () 
+	Route::group(['prefix' => '/', 'namespace' => 'Guest', 'as' => '.guest'], function () 
 	{
-		Route::get('/', 'LoginController@index')->name('index');
+		Route::get('/login', 'LoginController@index')->name('.login');
+		Route::get('/register', 'RegisterController@index')->name('.register');
 	});
 });

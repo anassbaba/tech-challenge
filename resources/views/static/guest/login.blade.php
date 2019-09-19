@@ -8,9 +8,9 @@
 		<form>
 			<input type="text" name="email" placeholder="Email adress">
 			<input type="password" name="password" placeholder="Password">
-			<input type="submit" name="submit" placeholder="Login">
+			<input type="submit" name="submit" value="Login">
 			<span class="divider"></span>
-			<span>- <a href="#">Register</a></span>
+			<span>- <a href="{{ route('static.guest.register') }}">Register</a></span>
 			<span>- <a href="#">Reset password</a></span>
 		</form>
 	</div>
