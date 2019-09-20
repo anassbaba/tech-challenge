@@ -11,13 +11,27 @@
 |
 */
 
-Route::group(['domain' => 'tech-chalange.test' ,'prefix' => '/', 'namespace' => 'Api', 'as' => 'dynamic'], function () {
+Route::group(['domain' => 'tech-chalange.test' ,'prefix' => '/dynamic', 'namespace' => 'Api', 'as' => 'dynamic'], function () {
+	
+	Route::get('/logout', function () {
+		if(auth()->logout())
+    		return 1;
+	});
+
+	Route::get('/user-details', function () {
+
+		if(auth()->check())
+    		return auth()->user();
+
+    	return 0;
+	});
+
 	Route::get('/', function () {
     	return view('dynamic.index');
 	});
 });
 
-Route::group(['domain' => 'static.tech-chalange.test' ,'prefix' => '/', 'namespace' => 'Api', 'as' => 'static'], function () 
+Route::group(['domain' => 'tech-chalange.test' ,'prefix' => '/', 'namespace' => 'Api', 'as' => 'static'], function () 
 { 
 	
 	Route::group(['prefix' => '/', 'namespace' => 'Guest', 'as' => '.guest'], function () 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\User\Item;
 
 use Auth;
 use Storage;
+use Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -16,11 +17,23 @@ class CreateController extends Controller
 
     public function new(Request $request)
     {
-    	$validatedData = $request->validate([
-        	'image' 		=> 'required|image',
-        	'title' 		=> 'required|max:255|min:3',
-        	'description' 	=> 'required',
-    	]);
+      if($request->ajax()){
+        $validator = Validator::make($request->all(), [
+            'image'    => 'required|image',
+             'title'    => 'required|max:255|min:3',
+            'description'  => 'required',
+        ]);
+
+        if (!$validator->passes()) {
+            return response()->json(['error'=>$validator->errors()->all()]);
+        }
+      }
+      else
+    	    $validatedData = $request->validate([
+        	   'image' 		=> 'required|image',
+        	   'title' 		=> 'required|max:255|min:3',
+        	   'description' 	=> 'required',
+    	    ]);
 
     	$path = $request->file('image')->store('images');
 
@@ -30,7 +43,10 @@ class CreateController extends Controller
     		'description' 	=> $request->get('description'),
     	]);
 
-    	return redirect()->to('user/item/all')->with(['success' => 'item created successfuly.']);
+        if($request->ajax())
+            return response()->json(['success' => 'item created successfuly.']);
+        else
+    	   return redirect()->to('user/item/all')->with(['success' => 'item created successfuly.']);
     }
 
     public function remove(Request $request)
@@ -42,7 +58,11 @@ class CreateController extends Controller
       	{
       		Storage::delete($item->image);
       		$item->delete();
-      		return redirect()->to('user/item/all')->with(['success' => 'item deleted successfuly.']);
+
+               if($request->ajax())
+                    return redirect()->json(['success' => 'item deleted successfuly.']);
+               else
+      		     return redirect()->to('user/item/all')->with(['success' => 'item deleted successfuly.']);
       	}
 
 
