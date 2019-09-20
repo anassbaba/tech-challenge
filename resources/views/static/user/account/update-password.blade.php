@@ -4,7 +4,7 @@
 
 @section('page-content')
 
-	<div class="login">
+	<div class="login-register">
 		<form method="POST" action="{{ route('static.user.account.update-password') }}">
 			@if ($errors->any())
 				<div class="errors">

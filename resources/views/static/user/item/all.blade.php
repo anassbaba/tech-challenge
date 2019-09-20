@@ -12,7 +12,7 @@
 		</div>
 		@endif
 
-		@foreach ($items = auth()->user()->items()->paginate(2) as $item)
+		@foreach ($items = auth()->user()->items()->orderBy('id', 'desc')->paginate(3) as $item)
 			<div class="card">
 				<div class="card-info">
 					<a href="{{ route('static.user.item.remove', $item->id) }}" class="remove" style="color: red;">Remove</a>

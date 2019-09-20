@@ -4,7 +4,7 @@
 
 @section('page-content')
 
-	<div class="login">
+	<div class="login-register">
 		<form method="POST" action="{{ route('static.guest.login') }}">
 			@if ($errors->any())
 			<div class="errors">

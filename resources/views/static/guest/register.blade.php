@@ -3,7 +3,7 @@
 @section('title', 'Register')
 
 @section('page-content')
-	<div class="register">
+	<div class="login-register">
 		<form method="POST" action="{{ route('static.guest.register') }}">
 			
 			@if ($errors->any())

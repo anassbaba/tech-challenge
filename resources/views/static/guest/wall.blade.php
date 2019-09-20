@@ -5,11 +5,10 @@
 @section('page-content')
 
 	<div class="wall">
-		@foreach ($items = \DB::table('items')->paginate(2) as $item)
-			
+		@foreach ($items = \DB::table('items')->orderBy('id', 'desc')->paginate(3) as $item)
 			<div class="card">
 				<div class="card-info">
-					<a href="{{ route('static.user.item.remove', $item->id) }}" class="remove" style="color: red;">Remove</a>
+					<span>poster: {{ App\User::find($item->user_id)->email ?? 'Unknown' }}</span>
 					<span class="date">{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</span>
 				</div>
 				<img src="{{ asset($item->image) }}">

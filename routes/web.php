@@ -11,8 +11,13 @@
 |
 */
 
+Route::group(['domain' => 'tech-chalange.test' ,'prefix' => '/', 'namespace' => 'Api', 'as' => 'dynamic'], function () {
+	Route::get('/', function () {
+    	return view('dynamic.index');
+	});
+});
 
-Route::group(['prefix' => '/', 'namespace' => 'Api', 'as' => 'static'], function () 
+Route::group(['domain' => 'static.tech-chalange.test' ,'prefix' => '/', 'namespace' => 'Api', 'as' => 'static'], function () 
 { 
 	
 	Route::group(['prefix' => '/', 'namespace' => 'Guest', 'as' => '.guest'], function () 
@@ -21,6 +26,7 @@ Route::group(['prefix' => '/', 'namespace' => 'Api', 'as' => 'static'], function
 		Route::group(['middleware' => 'guest'], function(){
  			
  			//login
+			Route::get('/', 'LoginController@index')->name('.login');
 			Route::get('/login', 'LoginController@index')->name('.login');
 			Route::post('/login', 'LoginController@auth')->name('.login');
 		
