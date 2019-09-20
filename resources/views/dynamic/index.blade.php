@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>@yield('title')</title>
+	<title></title>
 
-	<link rel="stylesheet" type="text/css" href="{{ asset('css/dynamic/app.css') }}">
-</head>
-<body>
 	<noscript>
     	<meta HTTP-EQUIV="REFRESH" content="0; url=http://static.tech-chalange.test"> 
 	</noscript>
 
-	<div class="app">
-		hello vuejs app
+</head>
+<body>
+	<div id="app">
+		<h1>Hello App!</h1>
+		<router-view></router-view>
 	</div>
+
+	<script src="{{ asset('js/app.js') }}"></script>
+
 </body>
 </html>
