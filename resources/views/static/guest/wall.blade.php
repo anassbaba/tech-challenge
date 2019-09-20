@@ -5,17 +5,27 @@
 @section('page-content')
 
 	<div class="wall">
-		<div class="card">
-			<div class="card-info">
-				<span class="user">posted by: midohox</span>
-				<span class="date">23 munite ago</span>
+		@foreach ($items = \DB::table('items')->paginate(2) as $item)
+			
+			<div class="card">
+				<div class="card-info">
+					<a href="{{ route('static.user.item.remove', $item->id) }}" class="remove" style="color: red;">Remove</a>
+					<span class="date">{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</span>
+				</div>
+				<img src="{{ asset($item->image) }}">
+				<b class="title">{{ $item->title }}</b>
+				<p> {{ $item->description }}</p>
 			</div>
-			<img src="https://picsum.photos/300/150?random=1">
-			<b class="title">Technologies to use</b>
-			<p>
-				Read the instructions carefully and do not hesitate to check the Links and resources section before you start.
-				Join us in slack, then join #tech-challenge and do not hesitate to address any question,
-			</p>
+		@endforeach
+
+		<div class="paginate" style="display: inline-block;text-align: center;">
+			@if($items->previousPageUrl())
+				<a href="{{ $items->previousPageUrl() }}" style="text-align: center;text-decoration: none;">< prev</a>
+			@endif
+			<span>({{ $items->currentPage() }})</span>
+			@if($items->hasMorePages())
+				<a href="{{ $items->nextPageUrl() }}" style="text-align: center;text-decoration: none;">next ></a>
+			@endif
 		</div>
 	</div>
 

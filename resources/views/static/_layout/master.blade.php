@@ -7,13 +7,25 @@
 </head>
 <body>
 
-	<div class="app @if(auth()->user()) logged-in @endif">
+	<div class="app logged-in">
 
-		@if(auth()->user())
+		
 		<div class="menu">
+			@if(auth()->user())
 			<div class="user">
 				Email: <b> {{ auth()->user()->email }}</b>
 			</div>
+			@endif
+			<div class="home">
+				<span>- Home</span><br>
+					<a href="{{ route('static.guest.wall') }}">- wall</a><br>
+					@if(!auth()->user())
+						<a href="{{ route('static.guest.login') }}">- login</a><br>
+						<a href="{{ route('static.guest.register') }}">- register</a><br>
+					@endif
+			</div>
+
+			@if(auth()->user())
 			<div class="item">
 				<span>- Item</span><br>
 					<a href="{{ route('static.user.item.all') }}">- all</a><br>
@@ -24,8 +36,10 @@
 					<a href="{{ route('static.user.account.update-password') }}">- update password</a><br>
 					<a href="{{ route('static.guest.logout') }}">- logout</a>
 			</div>
+			@endif
+
 		</div>
-		@endif
+		
 
 		<div class="page">
 			@yield('page-content')
