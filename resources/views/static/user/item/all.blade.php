@@ -7,9 +7,13 @@
 	<div class="wall">
 
 		@if (session('success') != null)
-		<div class="errors">
-			<p style="color:green; text-align: center;"> {{ session('success') }}</p>
-		</div>
+		<span  style="color:green; text-align: center;">
+			<span> {{ session('success') }}</span>
+		</span>
+		@endif
+
+		@if(!auth()->user()->items()->count())
+			<b style="text-align: center; color: gray;">No items.</b>
 		@endif
 
 		@foreach ($items = auth()->user()->items()->orderBy('id', 'desc')->paginate(3) as $item)
@@ -29,7 +33,11 @@
 			@if($items->previousPageUrl())
 				<a href="{{ $items->previousPageUrl() }}" style="text-align: center;text-decoration: none;">< prev</a>
 			@endif
-			<span>({{ $items->currentPage() }})</span>
+
+			@if(auth()->user()->items()->count())
+				<span>({{ $items->currentPage() }})</span>
+			@endif
+
 			@if($items->hasMorePages())
 				<a href="{{ $items->nextPageUrl() }}" style="text-align: center;text-decoration: none;">next ></a>
 			@endif

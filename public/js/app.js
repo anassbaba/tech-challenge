@@ -1995,14 +1995,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  created: function created() {
+  beforeCreate: function beforeCreate() {
     var _this = this;
 
-    window.axios.get('/user/item/all').then(function (response) {
+    window.axios.get('/wall').then(function (response) {
+      console.log(response);
       console.log(response);
 
-      _this.$store.commit("UPDATE_USER_ITEMS", response.data);
+      _this.$store.commit("UPDATE_WALL", response.data);
+
+      _this.$store.commit("UPDATE_WALL", response.data);
     })["catch"](function (error) {
       if (error.response.status === 422) {
         _this.errors = error.response.data.errors || {};
@@ -2036,18 +2040,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  created: function created() {
+  mounted: function mounted() {
     var _this = this;
 
-    window.axios.get('/wall').then(function (response) {
-      console.log(response);
-
-      _this.$store.commit("UPDATE_WALL", response.data);
-    })["catch"](function (error) {
-      if (error.response.status === 422) {
-        _this.errors = error.response.data.errors || {};
-      }
+    window.axios.get('/user/item/all').then(function (response) {
+      _this.$store.commit("UPDATE_USER_ITEMS", response.data);
     });
   }
 });
@@ -2708,7 +2707,11 @@ var render = function() {
         _c("span", [_vm._v("- Home")]),
         _c("br"),
         _vm._v(" "),
-        _c("router-link", { attrs: { to: "/wall" } }, [_vm._v("- wall")]),
+        _c("router-link", { attrs: { to: "/wall" } }, [
+          _c("span", { class: this.$route.path == "/wall" ? "active" : "" }, [
+            _vm._v("- wall")
+          ])
+        ]),
         _c("br"),
         _vm._v(" "),
         !this.$store.state.userLoggedIn
@@ -2716,12 +2719,20 @@ var render = function() {
               "div",
               [
                 _c("router-link", { attrs: { to: "login" } }, [
-                  _vm._v("- login")
+                  _c(
+                    "span",
+                    { class: this.$route.path == "/login" ? "active" : "" },
+                    [_vm._v("- login")]
+                  )
                 ]),
                 _c("br"),
                 _vm._v(" "),
                 _c("router-link", { attrs: { to: "register" } }, [
-                  _vm._v("- register")
+                  _c(
+                    "span",
+                    { class: this.$route.path == "/register" ? "active" : "" },
+                    [_vm._v("- register")]
+                  )
                 ])
               ],
               1
@@ -2741,12 +2752,20 @@ var render = function() {
               _c("br"),
               _vm._v(" "),
               _c("router-link", { attrs: { to: "/item-all" } }, [
-                _vm._v("- all")
+                _c(
+                  "span",
+                  { class: this.$route.path == "/item-all" ? "active" : "" },
+                  [_vm._v("- all")]
+                )
               ]),
               _c("br"),
               _vm._v(" "),
               _c("router-link", { attrs: { to: "/item-create" } }, [
-                _vm._v("- create")
+                _c(
+                  "span",
+                  { class: this.$route.path == "/item-create" ? "active" : "" },
+                  [_vm._v("- create")]
+                )
               ]),
               _c("br")
             ],
@@ -2761,12 +2780,23 @@ var render = function() {
               _c("br"),
               _vm._v(" "),
               _c("router-link", { attrs: { to: "/update-password" } }, [
-                _vm._v("- update password")
+                _c(
+                  "span",
+                  {
+                    class:
+                      this.$route.path == "/update-password" ? "active" : ""
+                  },
+                  [_vm._v("- update password")]
+                )
               ]),
               _c("br"),
               _vm._v(" "),
               _c("router-link", { attrs: { to: "/logout" } }, [
-                _vm._v("- logout")
+                _c(
+                  "span",
+                  { class: this.$route.path == "/logout" ? "active" : "" },
+                  [_vm._v("- logout")]
+                )
               ]),
               _c("br")
             ],
@@ -2854,7 +2884,11 @@ var render = function() {
               expression: "fields.password"
             }
           ],
-          attrs: { type: "text", placeholder: "Password", autocomplete: "on" },
+          attrs: {
+            type: "password",
+            placeholder: "Password",
+            autocomplete: "on"
+          },
           domProps: { value: _vm.fields.password },
           on: {
             input: function($event) {
@@ -3046,20 +3080,30 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "wall" },
-    _vm._l(this.$store.state.wall.data, function(item) {
-      return _c("div", { staticClass: "card" }, [
-        _c("div", { staticClass: "card-info" }, [
-          _c("span", { staticClass: "date" }, [_vm._v(_vm._s(item.created_at))])
-        ]),
-        _vm._v(" "),
-        _c("img", { attrs: { src: item.image } }),
-        _vm._v(" "),
-        _c("b", { staticClass: "title" }, [_vm._v(" " + _vm._s(item.title))]),
-        _vm._v(" "),
-        _c("p", [_vm._v("  " + _vm._s(item.description))])
-      ])
-    }),
-    0
+    [
+      this.$store.state.wall.total === 0
+        ? _c("b", { staticStyle: { "text-align": "center", color: "gray" } }, [
+            _vm._v("No items.")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm._l(this.$store.state.wall.data, function(item) {
+        return _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-info" }, [
+            _c("span", { staticClass: "date" }, [
+              _vm._v(_vm._s(item.created_at))
+            ])
+          ]),
+          _vm._v(" "),
+          _c("img", { attrs: { src: item.image } }),
+          _vm._v(" "),
+          _c("b", { staticClass: "title" }, [_vm._v(" " + _vm._s(item.title))]),
+          _vm._v(" "),
+          _c("p", [_vm._v("  " + _vm._s(item.description))])
+        ])
+      })
+    ],
+    2
   )
 }
 var staticRenderFns = []
@@ -3087,22 +3131,32 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "wall" },
-    _vm._l(this.$store.state.user.items.data, function(item) {
-      return _c("div", { staticClass: "card" }, [
-        _c("div", { staticClass: "card-info" }, [
-          _c("span", { staticStyle: { color: "red" } }, [_vm._v("remove")]),
+    [
+      this.$store.state.user.items.total === 0
+        ? _c("b", { staticStyle: { "text-align": "center", color: "gray" } }, [
+            _vm._v("No items.")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm._l(this.$store.state.user.items.data, function(item) {
+        return _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-info" }, [
+            _c("span", { staticStyle: { color: "red" } }, [_vm._v("remove")]),
+            _vm._v(" "),
+            _c("span", { staticClass: "date" }, [
+              _vm._v(_vm._s(item.created_at))
+            ])
+          ]),
           _vm._v(" "),
-          _c("span", { staticClass: "date" }, [_vm._v(_vm._s(item.created_at))])
-        ]),
-        _vm._v(" "),
-        _c("img", { attrs: { src: item.image } }),
-        _vm._v(" "),
-        _c("b", { staticClass: "title" }, [_vm._v(" " + _vm._s(item.title))]),
-        _vm._v(" "),
-        _c("p", [_vm._v("  " + _vm._s(item.description))])
-      ])
-    }),
-    0
+          _c("img", { attrs: { src: item.image } }),
+          _vm._v(" "),
+          _c("b", { staticClass: "title" }, [_vm._v(" " + _vm._s(item.title))]),
+          _vm._v(" "),
+          _c("p", [_vm._v("  " + _vm._s(item.description))])
+        ])
+      })
+    ],
+    2
   )
 }
 var staticRenderFns = []
@@ -19429,7 +19483,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_user_ItemALL_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/user/ItemALL.vue */ "./resources/js/components/user/ItemALL.vue");
 /* harmony import */ var _components_user_ItemCreate_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/user/ItemCreate.vue */ "./resources/js/components/user/ItemCreate.vue");
 /* harmony import */ var _components_user_UpdatePassword_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/user/UpdatePassword.vue */ "./resources/js/components/user/UpdatePassword.vue");
-/* harmony import */ var _components_user_Logout_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/user/Logout.vue */ "./resources/js/components/user/Logout.vue");
+/* harmony import */ var _components_user_Logout_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/user/Logout.vue */ "./resources/js/components/user/Logout.vue");
 /* harmony import */ var _components_Menu_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/Menu.vue */ "./resources/js/components/Menu.vue");
 
 
@@ -19456,7 +19510,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
 var routes = [//Guest
 {
   path: '/',
-  redirect: 'wall'
+  redirect: '/wall'
 }, {
   path: '/login',
   component: _components_guest_Login_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
@@ -19496,12 +19550,16 @@ var routes = [//Guest
   }
 }, {
   path: '/logout',
-  component: _components_user_Logout_vue__WEBPACK_IMPORTED_MODULE_11__["default"],
+  component: _components_user_Logout_vue__WEBPACK_IMPORTED_MODULE_9__["default"],
   meta: {
     requiresLogin: true
   }
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
+  history: true,
+  pathToRegexpOptions: {
+    strict: true
+  },
   routes: routes // short for `routes: routes`
 
 });
@@ -19509,7 +19567,14 @@ router.beforeEach(function (to, from, next) {
   if (to.matched.some(function (record) {
     return record.meta["public"];
   })) {
-    next();
+    window.axios.get('dynamic/user-details').then(function (response) {
+      if (response.data != 0) {
+        _store__WEBPACK_IMPORTED_MODULE_2__["store"].commit("UPDATE_USER_LOGGIN", true);
+        next();
+      } else {
+        next();
+      }
+    });
   } else {
     next();
   }

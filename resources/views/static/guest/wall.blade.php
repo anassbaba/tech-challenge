@@ -5,6 +5,11 @@
 @section('page-content')
 
 	<div class="wall">
+
+		@if(!\DB::table('items')->count())
+			<b style="text-align: center; color: gray;">No items.</b>
+		@endif
+
 		@foreach ($items = \DB::table('items')->orderBy('id', 'desc')->paginate(3) as $item)
 			<div class="card">
 				<div class="card-info">
@@ -21,7 +26,11 @@
 			@if($items->previousPageUrl())
 				<a href="{{ $items->previousPageUrl() }}" style="text-align: center;text-decoration: none;">< prev</a>
 			@endif
-			<span>({{ $items->currentPage() }})</span>
+			
+			@if(\DB::table('items')->count())
+				<span>({{ $items->currentPage() }})</span>
+			@endif
+
 			@if($items->hasMorePages())
 				<a href="{{ $items->nextPageUrl() }}" style="text-align: center;text-decoration: none;">next ></a>
 			@endif

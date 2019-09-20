@@ -13,12 +13,12 @@
 		<div class="menu">
 			@if(auth()->user())
 			<div class="user">
-				Email: <b> {{ auth()->user()->email }}</b>
+				#: <b> {{ auth()->user()->email }}</b>
 			</div>
 			@endif
 			<div class="home">
 				<span>- Home</span><br>
-					<a href="{{ route('static.guest.wall') }}">- wall</a><br>
+					<a class="active" href="{{ route('static.guest.wall') }}">- wall</a><br>
 					@if(!auth()->user())
 						<a href="{{ route('static.guest.login') }}">- login</a><br>
 						<a href="{{ route('static.guest.register') }}">- register</a><br>

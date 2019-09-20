@@ -32,7 +32,7 @@ Vue.use(VueRouter)
 const routes = [
 	  
     //Guest
-    { path: '/', redirect: 'wall' },
+    { path: '/', redirect: '/wall',},
   	{ path: '/login', component: Login, meta: { guest: true} },
   	{ path: '/register', component: Register, meta: { guest: true}},
   	{ path: '/wall', component: Wall, meta: { public: true}},
@@ -46,12 +46,21 @@ const routes = [
 
 
 const router = new VueRouter({
+  history: true,
+  pathToRegexpOptions: { strict: true } ,
   routes // short for `routes: routes`
 })
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.public)) {
-    next();
+    window.axios.get('dynamic/user-details').then(response => {
+    if (response.data != 0) {
+      store.commit("UPDATE_USER_LOGGIN", true);
+      next();
+    } else {
+      next();
+    }
+  })
   } else {
     next();
   }

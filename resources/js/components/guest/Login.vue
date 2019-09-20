@@ -8,7 +8,7 @@
 				<span>- {{ error }}</span>
 			</div>
 			<input type="text" v-model="fields.email" placeholder="Email adress">
-			<input type="text" v-model="fields.password" placeholder="Password" autocomplete="on">
+			<input type="password" v-model="fields.password" placeholder="Password" autocomplete="on">
 			<input type="submit" name="submit" value="Login">
 			<span class="divider"></span>
 			<span>- <router-link to="/register">register</router-link></span>
