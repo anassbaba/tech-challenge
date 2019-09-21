@@ -8,7 +8,8 @@ export const store = new Vuex.Store({
         message: '',
         userLoggedIn: false,
         user: {
-        	email: '',
+            email: '',
+        	itemRemoving: false,
         	items: {
                 data: [],
                 total: 0,
@@ -45,6 +46,11 @@ export const store = new Vuex.Store({
             state.wall.current_page = value.current_page; 
         },
         UPDATE_USER_ITEMS(state, value) {
+            if(value == 'remove'){
+                state.user.items.data = []
+                return;
+            }
+
             if(state.user.items.data.length == 0){
                 state.user.items = value
             }

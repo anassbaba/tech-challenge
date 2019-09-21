@@ -2080,6 +2080,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2121,6 +2122,15 @@ __webpack_require__.r(__webpack_exports__);
         _this2.loading = false;
 
         _this2.$store.commit("UPDATE_USER_ITEMS", response.data);
+      })["catch"](function (error) {});
+    },
+    removeItem: function removeItem(itemId, index) {
+      var _this3 = this;
+
+      window.axios.get('/user/item/remove/' + itemId).then(function (response) {
+        _this3.$store.commit("UPDATE_USER_ITEMS", 'remove');
+
+        _this3.loadItems(false);
       })["catch"](function (error) {});
     }
   },
@@ -3231,10 +3241,25 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm._l(_vm.items, function(item) {
+      _vm._l(_vm.items, function(item, index) {
         return _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-info" }, [
-            _c("span", { staticStyle: { color: "red" } }, [_vm._v("remove")]),
+            false
+              ? undefined
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                staticStyle: { color: "red", cursor: "pointer" },
+                on: {
+                  click: function($event) {
+                    return _vm.removeItem(item.id, index)
+                  }
+                }
+              },
+              [_vm._v("(" + _vm._s(item.id) + ") remove")]
+            ),
             _vm._v(" "),
             _c("span", { staticClass: "date" }, [
               _vm._v(_vm._s(item.created_at))
@@ -20290,6 +20315,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     userLoggedIn: false,
     user: {
       email: '',
+      itemRemoving: false,
       items: {
         data: [],
         total: 0,
@@ -20325,6 +20351,11 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
       state.wall.current_page = value.current_page;
     },
     UPDATE_USER_ITEMS: function UPDATE_USER_ITEMS(state, value) {
+      if (value == 'remove') {
+        state.user.items.data = [];
+        return;
+      }
+
       if (state.user.items.data.length == 0) {
         state.user.items = value;
       } else {

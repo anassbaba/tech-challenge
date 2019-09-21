@@ -60,9 +60,9 @@ class CreateController extends Controller
       		$item->delete();
 
                if($request->ajax())
-                    return redirect()->json(['success' => 'item deleted successfuly.']);
+                  return response()->json(['success' => 'item deleted successfuly.']);
                else
-      		     return redirect()->to('user/item/all')->with(['success' => 'item deleted successfuly.']);
+      		        return redirect()->to('user/item/all')->with(['success' => 'item deleted successfuly.']);
       	}
 
 

@@ -2,9 +2,10 @@
 	<div class="wall"">
 		<b style="text-align: center; color: gray;" v-if="this.$store.state.user.items.total === 0">No items.</b>
 		
-		<div class="card" v-for="item in items">
+		<div class="card" v-for="(item, index) in items">
 			<div class="card-info">
-				<span style="color: red">remove</span>
+				<span v-if="false"><img width="50" src="img/loading-inline.gif"></span>
+				<span style="color: red; cursor: pointer;" @click="removeItem(item.id, index)">({{ item.id }}) remove</span>
 				<span class="date">{{ item.created_at }}</span>
 			</div>
 			<img v-bind:src="item.image">
@@ -26,7 +27,6 @@
 			}
 		},
 		mounted() {
-
 			this.loadItems(false);
 
 			const listElm = document.getElementsByTagName("body")[0];
@@ -63,9 +63,19 @@
 
 				}).catch(error => {});
 			},
+			removeItem(itemId, index)
+			{
+				window.axios.get('/user/item/remove/' + itemId).then(response => 
+				{   
+					this.$store.commit("UPDATE_USER_ITEMS", 'remove')
+					this.loadItems(false);
+
+				}).catch(error => {});
+			}
 		},
 		computed: {
-			items: function() {
+			items: function() 
+			{
 				return this.$store.state.user.items.data;
 			}
 		}
