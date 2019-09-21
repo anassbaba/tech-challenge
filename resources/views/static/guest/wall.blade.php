@@ -13,7 +13,7 @@
 		@foreach ($items = \DB::table('items')->orderBy('id', 'desc')->paginate(3) as $item)
 			<div class="card">
 				<div class="card-info">
-					<span>poster: {{ App\User::find($item->user_id)->email ?? 'Unknown' }}</span>
+					<span>poster:{{ $item->id }} {{ App\User::find($item->user_id)->email ?? 'Unknown' }}</span>
 					<span class="date">{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</span>
 				</div>
 				<img src="{{ asset($item->image) }}">

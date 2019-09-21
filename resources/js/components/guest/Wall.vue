@@ -36,7 +36,6 @@
 				if(bottomOfWindow && !this.loading && !this.pagesEnd) 
 				{
 					this.loading = false
-					console.log('body.scrollTop')
 					this.loadItems(true);
 				}
 			});
