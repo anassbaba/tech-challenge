@@ -1,7 +1,7 @@
 <template lang="jade">
 	<div class="wall card-container">
 		<div class="card">
-			<form @submit.prevent="submit" enctype="multipart/form-data">
+			<form @submit.prevent="submit">
 				<div class="errors" v-if="this.errors">
 					<span v-for="error in this.errors" >- {{ error }}</span>
 				</div>
@@ -39,12 +39,12 @@
 				
 				window.axios.post('/user/item/create', formData, { headers: { 'Content-Type': 'multipart/form-data' } }).then(response => 
 				{
-					if(response.data.error !== null)
+					if(response.data.error != null)
 						this.errors = response.data.error
 
-					if(response.data.success !== null){
+					if(response.data.success != null){
 						this.$store.commit("UPDATE_MESSAGE", response.data.success)
-						this.$router.push('/item-all')
+						//this.$router.push('/item-all')
 					}
 
 				}).catch(error => {

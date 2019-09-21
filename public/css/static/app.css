@@ -20,8 +20,9 @@
   transition: box-shadow 0.1s ease, transform 0.1s ease;
 }
 .wall .card img {
-  height: 170px;
-  width: auto;
+  max-height: 150px;
+  max-width: 100%;
+  margin: auto;
 }
 .wall .card p {
   font-size: 12px;

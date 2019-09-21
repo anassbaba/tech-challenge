@@ -1996,22 +1996,58 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  beforeCreate: function beforeCreate() {
+  data: function data() {
+    return {
+      loading: false,
+      pagesEnd: false
+    };
+  },
+  mounted: function mounted() {
     var _this = this;
 
-    window.axios.get('/wall').then(function (response) {
-      console.log(response);
-      console.log(response);
+    this.loadItems(false);
+    var listElm = document.getElementsByTagName("body")[0];
+    var body = document.getElementsByTagName("BODY")[0];
+    document.addEventListener('scroll', function (e) {
+      var bottomOfWindow = window.innerHeight + window.scrollY >= document.body.offsetHeight;
 
-      _this.$store.commit("UPDATE_WALL", response.data);
+      if (bottomOfWindow && !_this.loading && !_this.pagesEnd) {
+        _this.loading = false;
+        console.log('body.scrollTop');
 
-      _this.$store.commit("UPDATE_WALL", response.data);
-    })["catch"](function (error) {
-      if (error.response.status === 422) {
-        _this.errors = error.response.data.errors || {};
+        _this.loadItems(true);
       }
     });
+  },
+  methods: {
+    loadItems: function loadItems() {
+      var _this2 = this;
+
+      var loadMore = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      var current_page = this.$store.state.wall.current_page;
+
+      if (loadMore) {
+        this.loading = true;
+        current_page = current_page + 1;
+      }
+
+      window.axios.get('/wall?page=' + current_page).then(function (response) {
+        if (current_page >= _this2.$store.state.wall.last_page) _this2.pagesEnd = true;
+        _this2.loading = false;
+
+        _this2.$store.commit("UPDATE_WALL", response.data);
+      })["catch"](function (error) {});
+    }
+  },
+  computed: {
+    items: function items() {
+      return this.$store.state.wall.data;
+    }
   }
 });
 
@@ -2026,6 +2062,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -2103,12 +2140,11 @@ __webpack_require__.r(__webpack_exports__);
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (response) {
-        if (response.data.error !== null) _this.errors = response.data.error;
+        if (response.data.error != null) _this.errors = response.data.error;
 
-        if (response.data.success !== null) {
-          _this.$store.commit("UPDATE_MESSAGE", response.data.success);
+        if (response.data.success != null) {
+          _this.$store.commit("UPDATE_MESSAGE", response.data.success); //this.$router.push('/item-all')
 
-          _this.$router.push('/item-all');
         }
       })["catch"](function (error) {
         if (error.response.status === 422) {
@@ -3079,7 +3115,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "wall" },
+    { staticClass: "wall", attrs: { id: "infinite-wall" } },
     [
       this.$store.state.wall.total === 0
         ? _c("b", { staticStyle: { "text-align": "center", color: "gray" } }, [
@@ -3087,9 +3123,11 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm._l(this.$store.state.wall.data, function(item) {
+      _vm._l(_vm.items, function(item) {
         return _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-info" }, [
+            _c("span", { staticClass: "id" }, [_vm._v(_vm._s(item.id))]),
+            _vm._v(" "),
             _c("span", { staticClass: "date" }, [
               _vm._v(_vm._s(item.created_at))
             ])
@@ -3101,7 +3139,19 @@ var render = function() {
           _vm._v(" "),
           _c("p", [_vm._v("  " + _vm._s(item.description))])
         ])
-      })
+      }),
+      _vm._v(" "),
+      this.loading
+        ? _c("b", { staticStyle: { "text-align": "center", color: "gray" } }, [
+            _c("img", { attrs: { src: "img/loading-inline.gif" } })
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      this.pagesEnd
+        ? _c("b", { staticStyle: { "text-align": "center", color: "gray" } }, [
+            _vm._v(" The End.")
+          ])
+        : _vm._e()
     ],
     2
   )
@@ -3186,7 +3236,6 @@ var render = function() {
       _c(
         "form",
         {
-          attrs: { enctype: "multipart/form-data" },
           on: {
             submit: function($event) {
               $event.preventDefault()
@@ -20188,7 +20237,12 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
       email: '',
       items: {}
     },
-    wall: {}
+    wall: {
+      data: [],
+      total: 0,
+      last_page: 1000000000000,
+      current_page: 0
+    }
   },
   mutations: {
     UPDATE_USER_LOGGIN: function UPDATE_USER_LOGGIN(state, value) {
@@ -20198,7 +20252,20 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
       state.message = value;
     },
     UPDATE_WALL: function UPDATE_WALL(state, value) {
-      state.wall = value;
+      console.log(state.wall.data.length);
+
+      if (state.wall.data.length == 0) {
+        state.wall = value;
+        console.log('BBBB');
+      } else {
+        for (var i = value.data.length - 1; i >= 0; i--) {
+          state.wall.data.push(value.data[i]);
+        }
+      }
+
+      state.wall.total = value.total;
+      state.wall.last_page = value.last_page;
+      state.wall.current_page = value.current_page;
     },
     UPDATE_USER_ITEMS: function UPDATE_USER_ITEMS(state, value) {
       state.user.items = value;

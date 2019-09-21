@@ -10,7 +10,7 @@
 	</noscript>
 
 </head>
-<body>
+<body >
 	<div id="app" class="app">
 		<menu-component></menu-component>
 

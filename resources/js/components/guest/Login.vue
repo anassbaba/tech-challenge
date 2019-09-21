@@ -18,7 +18,6 @@
 
 <script>
 	export default {
-
 		data() {
 			return {
 				fields: {
