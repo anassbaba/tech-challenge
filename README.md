@@ -53,6 +53,10 @@ you can access it by url: [http://localhost/](http://localhost/)
 #### Multiple-Page-Application File Structure
 ![application by El Mehdi Abdi](https://i.imgur.com/LjG7dVM.png)
 
+# Back-end - Api
+Both models they share the same back-end api.
+
+![application by El Mehdi Abdi](https://i.imgur.com/V4KasYX.png)
 
 # Assets - css
 Both models they share the same assets css it's uses [Less Framework](http://lesscss.org/)
