@@ -109,4 +109,7 @@ $ php artisan migrate:refresh --seed
 
 ### Questions?
 
-If you have any questions, email me : elmehdiabdi@icloud.com
+If you have any questions, contact me :
+
+	Email : elmehdiabdi@icloud.com
+	Phone : +212 700741596
