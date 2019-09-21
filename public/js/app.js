@@ -1937,6 +1937,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1945,7 +1947,7 @@ __webpack_require__.r(__webpack_exports__);
         password: '',
         password_confirmation: ''
       },
-      error: false
+      errors: {}
     };
   },
   methods: {
@@ -1953,7 +1955,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.errors = {};
-      window.axios.post('/register', this.fields).then(function (response) {
+      window.axios.post('/register/new', this.fields).then(function (response) {
         console.log(response.data);
         if (response.data.error != null) _this.error = response.data.error;
 
@@ -3044,12 +3046,18 @@ var render = function() {
         }
       },
       [
-        this.error
+        Object.entries(this.errors).length !== 0
           ? _c(
               "div",
               { staticClass: "errors" },
-              _vm._l(this.error, function(error) {
-                return _c("span", [_vm._v("- " + _vm._s(error))])
+              _vm._l(this.errors, function(fields) {
+                return _c(
+                  "span",
+                  _vm._l(fields, function(field) {
+                    return _c("span", [_vm._v("- " + _vm._s(field))])
+                  }),
+                  0
+                )
               }),
               0
             )
@@ -19633,7 +19641,7 @@ __webpack_require__.r(__webpack_exports__);
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common = {
-  'X-Requested-With': 'XMLHttpRequest',
+  'Accept': 'application/json, text/plain, */*',
   'X-CSRF-TOKEN': window.csrf_token
 };
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('menu-component', _components_Menu_vue__WEBPACK_IMPORTED_MODULE_10__["default"]); // Vue.config.productionTip = false

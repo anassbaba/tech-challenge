@@ -13,6 +13,8 @@
 
 Route::group(['domain' => 'tech-chalange.test' ,'prefix' => '/dynamic', 'namespace' => 'Api', 'as' => 'dynamic'], function () {
 	
+	
+
 	Route::get('/logout', function () {
 		if(auth()->logout())
     		return 1;
@@ -31,9 +33,13 @@ Route::group(['domain' => 'tech-chalange.test' ,'prefix' => '/dynamic', 'namespa
 	});
 });
 
+use Illuminate\Http\Request;
 Route::group(['domain' => 'tech-chalange.test' ,'prefix' => '/', 'namespace' => 'Api', 'as' => 'static'], function () 
 { 
-	
+	Route::get('/dd', function (Request $req) {
+		dd($req->wantsJson());
+	});
+
 	Route::group(['prefix' => '/', 'namespace' => 'Guest', 'as' => '.guest'], function () 
 	{
 
@@ -46,7 +52,7 @@ Route::group(['domain' => 'tech-chalange.test' ,'prefix' => '/', 'namespace' => 
 		
 			//register
 			Route::get('/register', 'RegisterController@index')->name('.register');
-			Route::post('/register', 'RegisterController@register')->name('.register');
+			Route::post('/register/new', 'RegisterController@new')->name('.register.new');
 			Route::get('/email/verify/{id}/{hash}', 'RegisterController@verify')->name('.register.verify');
 		});
 

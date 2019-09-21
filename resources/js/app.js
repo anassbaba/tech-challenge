@@ -18,9 +18,8 @@ import Logout from './components/user/Logout.vue';
 import Menu from './components/Menu.vue';
 
 window.axios = require('axios');
-
 window.axios.defaults.headers.common = {
-    'X-Requested-With': 'XMLHttpRequest',
+    'Accept': 'application/json, text/plain, */*',
     'X-CSRF-TOKEN': window.csrf_token
 };
 

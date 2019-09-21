@@ -1,8 +1,10 @@
 <template lang="jade">
 	<div class="login-register">
 		<form @submit.prevent="submit">
-			<div class="errors" v-if="this.error">
-				<span v-for="error in this.error" >- {{ error }}</span>
+			<div class="errors" v-if="Object.entries(this.errors).length !== 0">
+				<span v-for="fields in this.errors" >
+					<span v-for="field in fields">- {{ field }}</span>
+				</span>
 			</div>
 			<input type="text" v-model="fields.email" placeholder="Email adress">
 			<input type="password" v-model="fields.password" placeholder="Password" autocomplete="on">
@@ -24,15 +26,15 @@
 					password: '',
 					password_confirmation: '',
 				},
-				error: false,
+				errors: {},
 			}
 		},
 		methods: {
 			submit() {
 
 				this.errors = {};
-				window.axios.post('/register', this.fields).then(response => 
-				{
+				window.axios.post('/register/new', this.fields).then(response => 
+				{   
 					console.log(response.data)
 					if(response.data.error != null)
 						this.error = response.data.error

@@ -14,18 +14,25 @@
 			</div>
 			@endif
 
-			@if (session('error') != null)
-			<div class="errors">
-				<span>- {{ session('error') }}</span>
-			</div>
-			@endif
+			@if (session('messages') != null)
+				@if(isset(session('messages')['errors']))
+				    <div class="errors">
+				    	@foreach(session('messages')['errors'] as $error)
+					    	<span>- {{ $error }}</span>
+				    	@endforeach
+				    </div>
+				@endif
+			
 
-			@if (session('success') != null)
-			<div class="errors">
-				<span style="color:green">- {{ session('success') }}</span>
-			</div>
-			@endif
-            
+				@if (isset(session('messages')['success']))
+					<div class="errors">
+						@foreach(session('messages')['success'] as $success)
+							<span style="color:green">- {{ $success }}</span>
+						@endforeach
+					</div>
+				@endif
+            @endif
+
             @csrf
             
 			<input type="text" name="email" placeholder="Email adress">

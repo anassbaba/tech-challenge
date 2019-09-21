@@ -10,4 +10,13 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    protected function response($request, $route, $data)
+    {
+    	if ($request->wantsJson()) {
+    		return response()->json($data);
+    	} else {
+    		return redirect()->to($route)->with($data);
+    	}
+    }
 }
