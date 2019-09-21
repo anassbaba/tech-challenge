@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Tech-Chalange</title>
 
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/static/app.css') }}">
 
