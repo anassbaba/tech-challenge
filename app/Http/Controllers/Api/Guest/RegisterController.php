@@ -43,27 +43,23 @@ class RegisterController extends Controller
     	
     	$checkHash = Cache::get('user::'.$id);
 
-    	if($checkHash == null && $user->email_verified_at == null) // email verification expired resetn new one.
-    	{
-    		VerificationEmailJob::dispatchNow($user);
-    		return redirect()->to('login')->with(['error' => 'email verification hash is expired we sent you an other.']);
-    	}
-
-    	if($hash == $checkHash && $user->email_verified_at == null) // verification done.
+    	if ($hash == $checkHash && $user->email_verified_at == null)
     	{
     		$user->update([
     			'email_verified_at' => Carbon::now()
     		]);
 
-    		return redirect()->to('login')->with([
-    			'error'   => false,
-    			'success' => 'verification complete you can now login.'
-    		]);
-    	}
-    	else if($hash == $checkHash) // already verified.
-    		return redirect()->to('login')->with(['success' => 'already verified you can login.']);
-        else
+            Cache::forget('user::'.$id)
+
+            return $this->response($request, 'login', [
+                'messages'  => [
+                    'errors'  => [],
+                    'success' => ['Verification complete you can now login.']
+                ]
+            ]);
+
+        } else
             return abort(404);
 
-    }
+}
 }
