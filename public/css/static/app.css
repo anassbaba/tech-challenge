@@ -56,7 +56,7 @@
   grid-gap: 20px;
 }
 body {
-  font-family: monospace;
+  font-family: monospace, Courier;
 }
 .load {
   text-decoration: none;
