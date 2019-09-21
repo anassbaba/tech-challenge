@@ -7,13 +7,13 @@
 	<div class="wall">
 
 		@if(!\DB::table('items')->count())
-			<b style="text-align: center; color: gray;">No items.</b>
+			<b style="text-align: center; color: gray;">No worldwide items.</b>
 		@endif
 
 		@foreach ($items = \DB::table('items')->orderBy('id', 'desc')->paginate(3) as $item)
 			<div class="card">
 				<div class="card-info">
-					<span>poster:{{ $item->id }} {{ App\User::find($item->user_id)->email ?? 'Unknown' }}</span>
+					<span>id: {{ $item->id }}</span>
 					<span class="date">{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</span>
 				</div>
 				<img src="{{ asset($item->image) }}">

@@ -20,8 +20,10 @@ class LoginController extends Controller
 
     	if (Auth::attempt($credentials)) 
     	{
-            if(Auth::user()->email_verified_at == null) // email verification not yet
+            if(Auth::user()->email_verified_at == null) // email verification check
             {
+                Auth::logout();
+                
                 if($request->ajax())
                     return response()->json(['error' => 'your must verifiy your email to login.']);
                 else

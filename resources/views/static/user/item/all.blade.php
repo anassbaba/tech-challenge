@@ -13,13 +13,13 @@
 		@endif
 
 		@if(!auth()->user()->items()->count())
-			<b style="text-align: center; color: gray;">No items.</b>
+			<b style="text-align: center; color: gray;">You have no items.</b>
 		@endif
 
 		@foreach ($items = auth()->user()->items()->orderBy('id', 'desc')->paginate(3) as $item)
 			<div class="card">
 				<div class="card-info">
-					<a href="{{ route('static.user.item.remove', $item->id) }}" class="remove" style="color: red;">Remove</a>
+					<a href="{{ route('static.user.item.remove', $item->id) }}" class="remove" style="color: red;">(id: {{ $item->id }}) Remove</a>
 					<span class="date">{{ $item->created_at->diffForHumans() }}</span>
 				</div>
 				<img src="{{ asset($item->image) }}">

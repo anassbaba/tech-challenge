@@ -1,9 +1,9 @@
 <template lang="jade">
 	<div class="wall" id="infinite-wall">
-		<b style="text-align: center; color: gray;" v-if="this.$store.state.wall.total === 0">No items.</b>
+		<b style="text-align: center; color: gray;" v-if="this.$store.state.wall.total === 0">No worldwide items.</b>
 		<div class="card" v-for="item in items" >
 			<div class="card-info">
-				<span class="id">{{ item.id }}</span>
+				<span class="id">id: {{ item.id }}</span>
 				<span class="date">{{ item.created_at }}</span>
 			</div>
 			<img v-bind:src="item.image">
@@ -12,7 +12,7 @@
 		</div>
 
 		<b style="text-align: center; color: gray;" v-if="this.loading"><img src="img/loading-inline.gif"></b>
-		<b style="text-align: center; color: gray;" v-if="this.pagesEnd"> The End.</b>
+		<b style="text-align: center; color: gray;" v-if="this.pagesEnd && this.$store.state.wall.total > 0"> The End.</b>
 	</div>
 </template>
 
@@ -24,7 +24,7 @@
 				pagesEnd: false,
 			}
 		},
-		mounted() {
+		created() {
 			this.loadItems(false);
 
 			const listElm = document.getElementsByTagName("body")[0];

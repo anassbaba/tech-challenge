@@ -2007,7 +2007,7 @@ __webpack_require__.r(__webpack_exports__);
       pagesEnd: false
     };
   },
-  mounted: function mounted() {
+  created: function created() {
     var _this = this;
 
     this.loadItems(false);
@@ -2196,8 +2196,9 @@ __webpack_require__.r(__webpack_exports__);
         if (response.data.error != null) _this.errors = response.data.error;
 
         if (response.data.success != null) {
-          _this.$store.commit("UPDATE_MESSAGE", response.data.success); //this.$router.push('/item-all')
+          _this.$store.commit("UPDATE_MESSAGE", response.data.success);
 
+          _this.$router.push('/item-all');
         }
       })["catch"](function (error) {
         if (error.response.status === 422) {
@@ -3172,14 +3173,16 @@ var render = function() {
     [
       this.$store.state.wall.total === 0
         ? _c("b", { staticStyle: { "text-align": "center", color: "gray" } }, [
-            _vm._v("No items.")
+            _vm._v("No worldwide items.")
           ])
         : _vm._e(),
       _vm._v(" "),
       _vm._l(_vm.items, function(item) {
         return _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-info" }, [
-            _c("span", { staticClass: "id" }, [_vm._v(_vm._s(item.id))]),
+            _c("span", { staticClass: "id" }, [
+              _vm._v("id: " + _vm._s(item.id))
+            ]),
             _vm._v(" "),
             _c("span", { staticClass: "date" }, [
               _vm._v(_vm._s(item.created_at))
@@ -3200,7 +3203,7 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
-      this.pagesEnd
+      this.pagesEnd && this.$store.state.wall.total > 0
         ? _c("b", { staticStyle: { "text-align": "center", color: "gray" } }, [
             _vm._v(" The End.")
           ])
@@ -3237,7 +3240,7 @@ var render = function() {
     [
       this.$store.state.user.items.total === 0
         ? _c("b", { staticStyle: { "text-align": "center", color: "gray" } }, [
-            _vm._v("No items.")
+            _vm._v("You have no items.")
           ])
         : _vm._e(),
       _vm._v(" "),
@@ -3258,7 +3261,7 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("(" + _vm._s(item.id) + ") remove")]
+              [_vm._v("(id: " + _vm._s(item.id) + ") remove")]
             ),
             _vm._v(" "),
             _c("span", { staticClass: "date" }, [
@@ -3280,7 +3283,7 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
-      this.pagesEnd
+      this.pagesEnd && this.$store.state.user.items.total > 0
         ? _c("b", { staticStyle: { "text-align": "center", color: "gray" } }, [
             _vm._v(" The End.")
           ])

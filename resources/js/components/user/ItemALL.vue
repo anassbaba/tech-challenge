@@ -1,11 +1,11 @@
 <template lang="jade">
 	<div class="wall"">
-		<b style="text-align: center; color: gray;" v-if="this.$store.state.user.items.total === 0">No items.</b>
+		<b style="text-align: center; color: gray;" v-if="this.$store.state.user.items.total === 0">You have no items.</b>
 		
 		<div class="card" v-for="(item, index) in items">
 			<div class="card-info">
 				<span v-if="false"><img width="50" src="img/loading-inline.gif"></span>
-				<span style="color: red; cursor: pointer;" @click="removeItem(item.id, index)">({{ item.id }}) remove</span>
+				<span style="color: red; cursor: pointer;" @click="removeItem(item.id, index)">(id: {{ item.id }}) remove</span>
 				<span class="date">{{ item.created_at }}</span>
 			</div>
 			<img v-bind:src="item.image">
@@ -14,7 +14,7 @@
 		</div>
 
 		<b style="text-align: center; color: gray;" v-if="this.loading"><img src="img/loading-inline.gif"></b>
-		<b style="text-align: center; color: gray;" v-if="this.pagesEnd"> The End.</b>
+		<b style="text-align: center; color: gray;" v-if="this.pagesEnd && this.$store.state.user.items.total > 0"> The End.</b>
 	</div>
 </template>
 

@@ -44,7 +44,7 @@
 
 					if(response.data.success != null){
 						this.$store.commit("UPDATE_MESSAGE", response.data.success)
-						//this.$router.push('/item-all')
+						this.$router.push('/item-all')
 					}
 
 				}).catch(error => {
