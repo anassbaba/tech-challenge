@@ -20,37 +20,50 @@ class LoginController extends Controller
 
     	if (Auth::attempt($credentials)) 
     	{
-            if(Auth::user()->email_verified_at == null) // email verification check
+            if (Auth::user()->email_verified_at == null) 
             {
                 Auth::logout();
                 
-                if($request->ajax())
-                    return response()->json(['error' => 'your must verifiy your email to login.']);
-                else
-        		  return redirect()->to('login')->with(['error' => 'your must verifiy your email to login.']);
-            }
-            else{
+                return $this->response($request, 'login', [
+                    'messages'  => [
+                        'errors'    => ['You must verify your email adress.'],
+                        'success'   => []
+                    ]
+                ]);
 
-                if($request->ajax())
-                    return response()->json(['auth' => true]);
-                else
-                    return redirect('user/item/all'); // email verification ready
-            }
-        }
-        else{
+            } else {
 
-                if($request->ajax())
-                    return response()->json(['error' => 'email or password is invalide.']);
-                else
-        	       return redirect()->to('login')->with(['error' => 'email or password is invalide.']); // invalid logins
+                return $this->response($request, 'login', [
+                    'messages'  => [
+                        'errors'    => [],
+                        'success'   => ['Your login successfully.']
+                    ]
+                ]);
+
+            }
+        } else {
+
+            return $this->response($request, 'login', [
+                'messages'  => [
+                    'errors'    => ['Email or password is invalide.'],
+                    'success'   => []
+                ]
+            ]);
+            
         }
 
     }
 
-    public function logout()
+
+    public function logout(Request $request)
     {
         Auth::logout();
 
-        return redirect()->to('login');
+        return $this->response($request, 'login', [
+            'messages'  => [
+                'errors'    => [],
+                'success'   => []
+            ]
+        ]);
     }
 }

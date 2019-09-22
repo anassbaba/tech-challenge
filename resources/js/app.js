@@ -19,7 +19,7 @@ import Menu from './components/Menu.vue';
 
 window.axios = require('axios');
 window.axios.defaults.headers.common = {
-    'Accept': 'application/json, text/plain, */*',
+    'Accept': 'application/json',
     'X-CSRF-TOKEN': window.csrf_token
 };
 

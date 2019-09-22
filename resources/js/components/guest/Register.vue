@@ -34,12 +34,12 @@
 
 				this.errors = {};
 				window.axios.post('/register/new', this.fields).then(response => 
-				{   
+				{
 					console.log(response.data)
 					if(response.data.error != null)
 						this.error = response.data.error
-					if(response.data.success != null){
-						this.$store.commit("UPDATE_MESSAGE", response.data.success)
+					if(response.data.messages.success.length > 0){
+						this.$store.commit("UPDATE_MESSAGES", response.data.messages)
 						this.$router.push('/login')
 					}
 

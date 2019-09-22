@@ -28,8 +28,8 @@ class RegisterController extends Controller
 
         return $this->response($request, 'login', [
             'messages'  => [
-                'errors'  => [],
-                'success' => ['Your account created successfully we sent email verification.']
+                'errors'    => [],
+                'success'   => ['Your account created successfully we sent email verification.']
             ]
         ]);
     }
@@ -49,7 +49,7 @@ class RegisterController extends Controller
     			'email_verified_at' => Carbon::now()
     		]);
 
-            Cache::forget('user::'.$id)
+            Cache::forget('user::'.$id);
 
             return $this->response($request, 'login', [
                 'messages'  => [
@@ -61,5 +61,5 @@ class RegisterController extends Controller
         } else
             return abort(404);
 
-}
+    }
 }

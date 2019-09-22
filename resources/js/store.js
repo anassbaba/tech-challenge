@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
 	state: {
-        message: '',
+        messages: [],
         userLoggedIn: false,
         user: {
             email: '',
@@ -28,8 +28,8 @@ export const store = new Vuex.Store({
         UPDATE_USER_LOGGIN(state, value) {
             state.userLoggedIn = value
         },
-        UPDATE_MESSAGE(state, value) {
-            state.message = value
+        UPDATE_MESSAGES(state, value) {
+            state.messages = value
         },
         UPDATE_WALL(state, value) {
             if(state.wall.data.length == 0){

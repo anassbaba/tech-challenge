@@ -1,12 +1,16 @@
 <template lang="jade">
 	<div class="login-register">
 		<form @submit.prevent="submit">
-			<div class="errors" v-if="this.$store.state.message != ''">
-				<span style="color: green;">- {{ this.$store.state.message }}</span>
+
+			<div  v-if="messages.length !== 0">
+				<div class="errors" v-for="error in messages.errors">
+					<span >- {{ error }}</span>
+				</div>
+				<div class="errors" v-for="success in messages.success">
+					<span style="color: green; font-size: 10px;">- {{ success }}</span>
+				</div>
 			</div>
-			<div class="errors" v-if="this.error">
-				<span>- {{ error }}</span>
-			</div>
+
 			<input type="text" v-model="fields.email" placeholder="Email adress">
 			<input type="password" v-model="fields.password" placeholder="Password" autocomplete="on">
 			<input type="submit" name="submit" value="Login">
@@ -24,29 +28,39 @@
 					email: '',
 					password: '',
 				},
-				error: '',
 			}
+		},
+		mounted(){
+			this.$store.commit("UPDATE_MESSAGES", [])
 		},
 		methods: {
 			submit() {
-
-				this.errors = {};
 				window.axios.post('/login', this.fields).then(response => 
-				{
-					if(response.data.error !== null)
-						this.error = response.data.error
+				{ 
+					if(response.data.messages !== undefined)
+					{
+						this.$store.commit("UPDATE_MESSAGES", response.data.messages)
 
-					if(response.data.auth == true){
-						this.$store.commit("UPDATE_USER_LOGGIN", true);
-						this.$router.push('item-all')
+						if(response.data.messages.success.length > 0){
+							this.$store.commit("UPDATE_MESSAGES", [])
+							this.$store.commit("UPDATE_USER_LOGGIN", true)
+							this.$router.push('item-all')
+						}
 					}
 
 				}).catch(error => {
+
 					if (error.response.status === 422) {
 						this.errors = error.response.data.errors || {};
 					}
 				});
 			},
 		},
+		computed:{
+			messages()
+			{
+				return this.$store.state.messages;
+			}
+		}
 	}
 </script>

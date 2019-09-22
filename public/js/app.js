@@ -1878,34 +1878,48 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       fields: {
         email: '',
         password: ''
-      },
-      error: ''
+      }
     };
+  },
+  mounted: function mounted() {
+    this.$store.commit("UPDATE_MESSAGES", []);
   },
   methods: {
     submit: function submit() {
       var _this = this;
 
-      this.errors = {};
       window.axios.post('/login', this.fields).then(function (response) {
-        if (response.data.error !== null) _this.error = response.data.error;
+        if (response.data.messages !== undefined) {
+          _this.$store.commit("UPDATE_MESSAGES", response.data.messages);
 
-        if (response.data.auth == true) {
-          _this.$store.commit("UPDATE_USER_LOGGIN", true);
+          if (response.data.messages.success.length > 0) {
+            _this.$store.commit("UPDATE_MESSAGES", []);
 
-          _this.$router.push('item-all');
+            _this.$store.commit("UPDATE_USER_LOGGIN", true);
+
+            _this.$router.push('item-all');
+          }
         }
       })["catch"](function (error) {
         if (error.response.status === 422) {
           _this.errors = error.response.data.errors || {};
         }
       });
+    }
+  },
+  computed: {
+    messages: function messages() {
+      return this.$store.state.messages;
     }
   }
 });
@@ -1959,8 +1973,8 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response.data);
         if (response.data.error != null) _this.error = response.data.error;
 
-        if (response.data.success != null) {
-          _this.$store.commit("UPDATE_MESSAGE", response.data.success);
+        if (response.data.messages.success.length > 0) {
+          _this.$store.commit("UPDATE_MESSAGES", response.data.messages);
 
           _this.$router.push('/login');
         }
@@ -2932,18 +2946,28 @@ var render = function() {
         }
       },
       [
-        this.$store.state.message != ""
-          ? _c("div", { staticClass: "errors" }, [
-              _c("span", { staticStyle: { color: "green" } }, [
-                _vm._v("- " + _vm._s(this.$store.state.message))
-              ])
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        this.error
-          ? _c("div", { staticClass: "errors" }, [
-              _c("span", [_vm._v("- " + _vm._s(_vm.error))])
-            ])
+        _vm.messages.length !== 0
+          ? _c(
+              "div",
+              [
+                _vm._l(_vm.messages.errors, function(error) {
+                  return _c("div", { staticClass: "errors" }, [
+                    _c("span", [_vm._v("- " + _vm._s(error))])
+                  ])
+                }),
+                _vm._v(" "),
+                _vm._l(_vm.messages.success, function(success) {
+                  return _c("div", { staticClass: "errors" }, [
+                    _c(
+                      "span",
+                      { staticStyle: { color: "green", "font-size": "10px" } },
+                      [_vm._v("- " + _vm._s(success))]
+                    )
+                  ])
+                })
+              ],
+              2
+            )
           : _vm._e(),
         _vm._v(" "),
         _c("input", {
@@ -19641,7 +19665,7 @@ __webpack_require__.r(__webpack_exports__);
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common = {
-  'Accept': 'application/json, text/plain, */*',
+  'Accept': 'application/json',
   'X-CSRF-TOKEN': window.csrf_token
 };
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('menu-component', _components_Menu_vue__WEBPACK_IMPORTED_MODULE_10__["default"]); // Vue.config.productionTip = false
@@ -20322,7 +20346,7 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
-    message: '',
+    messages: [],
     userLoggedIn: false,
     user: {
       email: '',
@@ -20345,8 +20369,8 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     UPDATE_USER_LOGGIN: function UPDATE_USER_LOGGIN(state, value) {
       state.userLoggedIn = value;
     },
-    UPDATE_MESSAGE: function UPDATE_MESSAGE(state, value) {
-      state.message = value;
+    UPDATE_MESSAGES: function UPDATE_MESSAGES(state, value) {
+      state.messages = value;
     },
     UPDATE_WALL: function UPDATE_WALL(state, value) {
       if (state.wall.data.length == 0) {

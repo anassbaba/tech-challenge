@@ -6,14 +6,7 @@
 
 	<div class="login-register">
 		<form method="POST" action="{{ route('static.guest.login') }}">
-			@if ($errors->any())
-			<div class="errors">
-				@foreach ($errors->all() as $error)
-                	<span>- {{ $error }}</span>
-            	@endforeach
-			</div>
-			@endif
-
+			
 			@if (session('messages') != null)
 				@if(isset(session('messages')['errors']))
 				    <div class="errors">
