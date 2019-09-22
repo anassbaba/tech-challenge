@@ -8,11 +8,19 @@ use App\Http\Controllers\Controller;
 
 class AllController extends Controller
 {
-    public function index(Request $request)
-    {
-    	if($request->ajax())
-    		return response()->json(Auth::user()->items()->orderBy('id', 'desc')->paginate(10));
-    	else
-    		return view('static.user.item.all');
-    }
+	public function index()
+	{
+		return view('static.user.item.all');
+	}
+
+	public function json(Request $request)
+	{
+		return $this->response($request, 'user/item/all', [
+			'messages'  => [
+				'errors'    => [],
+				'success'   => []
+			],
+			'items' => Auth::user()->items()->orderBy('id', 'desc')->paginate(10)
+		]);
+	}
 }

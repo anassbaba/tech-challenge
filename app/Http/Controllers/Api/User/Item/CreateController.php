@@ -7,6 +7,7 @@ use Storage;
 use Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\Item\Create;
 
 class CreateController extends Controller
 {
@@ -15,56 +16,39 @@ class CreateController extends Controller
     	return view('static.user.item.create');
     }
 
-    public function new(Request $request)
+    public function new(Create $request)
     {
-      if($request->ajax()){
-        $validator = Validator::make($request->all(), [
-            'image'    => 'required|image',
-             'title'    => 'required|max:255|min:3',
-            'description'  => 'required',
-        ]);
-
-        if (!$validator->passes()) {
-            return response()->json(['error'=>$validator->errors()->all()]);
-        }
-      }
-      else
-    	    $validatedData = $request->validate([
-        	   'image' 		=> 'required|image',
-        	   'title' 		=> 'required|max:255|min:3',
-        	   'description' 	=> 'required',
-    	    ]);
-
-    	$path = $request->file('image')->store('images');
-
     	Auth::user()->items()->create([
-    		'image' 		=> $path,
+    		'image' 		=> $request->file('image')->store('images'),
     		'title' 		=> $request->get('title'),
     		'description' 	=> $request->get('description'),
     	]);
 
-        if($request->ajax())
-            return response()->json(['success' => 'item created successfuly.']);
-        else
-    	   return redirect()->to('user/item/all')->with(['success' => 'item created successfuly.']);
+        return $this->response($request, 'user/item/all', [
+            'messages'  => [
+                'errors'    => [],
+                'success'   => ['item created successfuly.']
+            ]
+        ]);
     }
 
     public function remove(Request $request)
     {
-      	$id =  $request->segment(4);
-      	$item = Auth::user()->items()->findOrFail($id);
+       $id  =  $request->segment(4);
 
-      	if($item)
-      	{
-      		Storage::delete($item->image);
-      		$item->delete();
+       $item = Auth::user()->items()->findOrFail($id);
 
-               if($request->ajax())
-                  return response()->json(['success' => 'item deleted successfuly.']);
-               else
-      		        return redirect()->to('user/item/all')->with(['success' => 'item deleted successfuly.']);
-      	}
+       if ($item) {
+            Storage::delete($item->image);
 
+            $item->delete();
 
+            return $this->response($request, 'user/item/all', [
+                'messages'  => [
+                    'errors'    => [],
+                    'success'   => ['item deleted successfuly.']
+                ]
+            ]);
+        }
     }
 }

@@ -1,9 +1,19 @@
 <template lang="jade">
 	<div class="wall card-container">
+		<div  v-if="messages.length !== 0">
+			<div class="errors" v-for="error in messages.errors">
+				<span >- {{ error }}</span>
+			</div>
+			<div class="errors" v-for="success in messages.success">
+				<span style="color: green; font-size: 10px;">- {{ success }}</span>
+			</div>
+		</div>
 		<div class="card">
 			<form @submit.prevent="submit">
-				<div class="errors" v-if="this.errors">
-					<span v-for="error in this.errors" >- {{ error }}</span>
+				<div class="errors" v-if="Object.entries(this.errors).length !== 0">
+					<span v-for="fields in this.errors" >
+						<span v-for="field in fields">- {{ field }}</span>
+					</span>
 				</div>
 
 				<input id="file" type="file" name="fields.image"  placeholder="Upload image">
@@ -27,6 +37,9 @@
 				errors: '',
 			}
 		},
+		mounted(){
+			this.$store.commit("UPDATE_MESSAGES", [])
+		},
 		methods: {
 			submit() {
 				var formData = new FormData();
@@ -39,12 +52,11 @@
 				
 				window.axios.post('/user/item/create', formData, { headers: { 'Content-Type': 'multipart/form-data' } }).then(response => 
 				{
-					if(response.data.error != null)
-						this.errors = response.data.error
-
-					if(response.data.success != null){
-						this.$store.commit("UPDATE_MESSAGE", response.data.success)
-						this.$router.push('/item-all')
+					if(response.data.messages !== undefined){
+						if(response.data.messages.success.length > 0){
+							this.$store.commit("UPDATE_MESSAGES", response.data.messages)
+							this.$router.push('/item-all')
+						}
 					}
 
 				}).catch(error => {
@@ -54,5 +66,11 @@
 				});
 			},
 		},
+		computed:{
+			messages()
+			{
+				return this.$store.state.messages;
+			}
+		}
 	}
 </script>

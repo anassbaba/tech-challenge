@@ -2133,11 +2133,11 @@ __webpack_require__.r(__webpack_exports__);
         current_page = current_page + 1;
       }
 
-      window.axios.get('/user/item/all?page=' + current_page).then(function (response) {
+      window.axios.get('/user/item/all/json?page=' + current_page).then(function (response) {
         if (current_page >= _this2.$store.state.user.items.last_page) _this2.pagesEnd = true;
         _this2.loading = false;
 
-        _this2.$store.commit("UPDATE_USER_ITEMS", response.data);
+        _this2.$store.commit("UPDATE_USER_ITEMS", response.data.items);
       })["catch"](function (error) {});
     },
     removeItem: function removeItem(itemId, index) {
@@ -2184,6 +2184,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2194,6 +2204,9 @@ __webpack_require__.r(__webpack_exports__);
       },
       errors: ''
     };
+  },
+  mounted: function mounted() {
+    this.$store.commit("UPDATE_MESSAGES", []);
   },
   methods: {
     submit: function submit() {
@@ -2209,18 +2222,23 @@ __webpack_require__.r(__webpack_exports__);
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (response) {
-        if (response.data.error != null) _this.errors = response.data.error;
+        if (response.data.messages !== undefined) {
+          if (response.data.messages.success.length > 0) {
+            _this.$store.commit("UPDATE_MESSAGES", response.data.messages);
 
-        if (response.data.success != null) {
-          _this.$store.commit("UPDATE_MESSAGE", response.data.success);
-
-          _this.$router.push('/item-all');
+            _this.$router.push('/item-all');
+          }
         }
       })["catch"](function (error) {
         if (error.response.status === 422) {
           _this.errors = error.response.data.errors || {};
         }
       });
+    }
+  },
+  computed: {
+    messages: function messages() {
+      return this.$store.state.messages;
     }
   }
 });
@@ -3347,6 +3365,30 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "wall card-container" }, [
+    _vm.messages.length !== 0
+      ? _c(
+          "div",
+          [
+            _vm._l(_vm.messages.errors, function(error) {
+              return _c("div", { staticClass: "errors" }, [
+                _c("span", [_vm._v("- " + _vm._s(error))])
+              ])
+            }),
+            _vm._v(" "),
+            _vm._l(_vm.messages.success, function(success) {
+              return _c("div", { staticClass: "errors" }, [
+                _c(
+                  "span",
+                  { staticStyle: { color: "green", "font-size": "10px" } },
+                  [_vm._v("- " + _vm._s(success))]
+                )
+              ])
+            })
+          ],
+          2
+        )
+      : _vm._e(),
+    _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c(
         "form",
@@ -3359,12 +3401,18 @@ var render = function() {
           }
         },
         [
-          this.errors
+          Object.entries(this.errors).length !== 0
             ? _c(
                 "div",
                 { staticClass: "errors" },
-                _vm._l(this.errors, function(error) {
-                  return _c("span", [_vm._v("- " + _vm._s(error))])
+                _vm._l(this.errors, function(fields) {
+                  return _c(
+                    "span",
+                    _vm._l(fields, function(field) {
+                      return _c("span", [_vm._v("- " + _vm._s(field))])
+                    }),
+                    0
+                  )
                 }),
                 0
               )

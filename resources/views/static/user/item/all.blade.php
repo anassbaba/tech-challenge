@@ -6,11 +6,15 @@
 
 	<div class="wall">
 
-		@if (session('success') != null)
-		<span  style="color:green; text-align: center;">
-			<span> {{ session('success') }}</span>
-		</span>
-		@endif
+		@if (session('messages') != null)
+			@if (isset(session('messages')['success']))
+				<div class="errors" style="text-align: center;">
+					@foreach(session('messages')['success'] as $success)
+						<span style="color:green; font-size: 10px;">- {{ $success }}</span>
+					@endforeach
+				</div>
+			@endif
+        @endif
 
 		@if(!auth()->user()->items()->count())
 			<b style="text-align: center; color: gray;">You have no items.</b>

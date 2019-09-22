@@ -72,6 +72,7 @@ Route::group(['domain' => 'tech-chalange.test' ,'prefix' => '/', 'namespace' => 
 		Route::group(['prefix' => '/item', 'namespace' => 'Item', 'as' => '.item'], function () 
 		{
 			Route::get('/all', 'AllController@index')->name('.all');
+			Route::get('/all/json', 'AllController@json')->name('.all.json');
 
 			Route::get('/create', 'CreateController@index')->name('.create');
 			Route::post('/create', 'CreateController@new')->name('.create');

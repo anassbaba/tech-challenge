@@ -53,13 +53,13 @@
 					current_page = current_page + 1
 				}
 
-				window.axios.get('/user/item/all?page=' + current_page).then(response => 
+				window.axios.get('/user/item/all/json?page=' + current_page).then(response => 
 				{   
 					if(current_page >= this.$store.state.user.items.last_page)
 						this.pagesEnd = true
 
 					this.loading = false
-					this.$store.commit("UPDATE_USER_ITEMS", response.data)
+					this.$store.commit("UPDATE_USER_ITEMS", response.data.items)
 
 				}).catch(error => {});
 			},
