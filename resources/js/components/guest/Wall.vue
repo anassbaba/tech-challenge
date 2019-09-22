@@ -56,7 +56,7 @@
 						this.pagesEnd = true
 
 					this.loading = false
-					this.$store.commit("UPDATE_WALL", response.data)
+					this.$store.commit("UPDATE_WALL", response.data.items)
 
 				}).catch(error => {});
 			},

@@ -2,7 +2,7 @@
 	<div class="login-register">
 		<form @submit.prevent="submit">
 
-			<div  v-if="messages.length !== 0">
+			<div  v-if="Object.entries(messages).length !== 0">
 				<div class="errors" v-for="error in messages.errors">
 					<span >- {{ error }}</span>
 				</div>
@@ -30,13 +30,13 @@
 				},
 			}
 		},
-		mounted(){
-			this.$store.commit("UPDATE_MESSAGES", [])
-		},
+		mounted(){},
 		methods: {
 			submit() {
+				this.$store.commit("UPDATE_MESSAGES", {})
 				window.axios.post('/login', this.fields).then(response => 
 				{ 
+					console.log(response.data.messages)
 					if(response.data.messages !== undefined)
 					{
 						this.$store.commit("UPDATE_MESSAGES", response.data.messages)

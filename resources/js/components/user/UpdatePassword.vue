@@ -2,13 +2,16 @@
 	<div class="login-register">
 		<form @submit.prevent="submit">
 
-			<div class="errors" v-if="this.errors">
-				<span v-for="error in this.errors" >- {{ error }}</span>
+
+			<div  v-if="Object.entries(messages).length !== 0">
+				<div class="errors" v-for="error in messages.errors">
+					<span >- {{ error }}</span>
+				</div>
+				<div class="errors" v-for="success in messages.success">
+					<span style="color: green; font-size: 10px;">- {{ success }}</span>
+				</div>
 			</div>
 
-			<div class="errors" v-if="this.success">
-				<span style="color: green">- {{ this.success }}</span>
-			</div>
 
 			<input type="password" v-model="fields.old_password" placeholder="Old password" autocomplete="on">
 			<input type="password" v-model="fields.new_password" placeholder="New password" autocomplete="on">
@@ -33,25 +36,40 @@
 				success: '',
 			}
 		},
+		mounted(){
+			this.$store.commit("UPDATE_MESSAGES", {})
+		},
 		methods: {
 			submit() {
 				this.errors = {};
 				window.axios.post('/user/account/update-password', this.fields).then(response => 
 				{
-					if(response.data.error !== null){
-						this.errors = response.data.error
-					}
-
-					if(response.data.success !== null){
-						this.success = response.data.success
+					if(response.data.messages !== undefined)
+					{
+						console.log(response.data.messages)
+						this.$store.commit("UPDATE_MESSAGES", response.data.messages)
 					}
 
 				}).catch(error => {
 					if (error.response.status === 422) {
-						this.errors = error.response.data.errors || {};
+						let messages = {}
+						messages.errors = []
+						for (var key in error.response.data.errors) {
+							for (var i = error.response.data.errors[key].length - 1; i >= 0; i--) {
+								messages.errors[i] = error.response.data.errors[key][i]
+							}
+						}
+
+						this.$store.commit("UPDATE_MESSAGES", messages)
 					}
 				});
 			},
 		},
+		computed:{
+			messages()
+			{
+				return this.$store.state.messages;
+			}
+		}
 	}
 </script>

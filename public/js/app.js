@@ -1891,14 +1891,15 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
-  mounted: function mounted() {
-    this.$store.commit("UPDATE_MESSAGES", []);
-  },
+  mounted: function mounted() {},
   methods: {
     submit: function submit() {
       var _this = this;
 
+      this.$store.commit("UPDATE_MESSAGES", {});
       window.axios.post('/login', this.fields).then(function (response) {
+        console.log(response.data.messages);
+
         if (response.data.messages !== undefined) {
           _this.$store.commit("UPDATE_MESSAGES", response.data.messages);
 
@@ -2055,7 +2056,7 @@ __webpack_require__.r(__webpack_exports__);
         if (current_page >= _this2.$store.state.wall.last_page) _this2.pagesEnd = true;
         _this2.loading = false;
 
-        _this2.$store.commit("UPDATE_WALL", response.data);
+        _this2.$store.commit("UPDATE_WALL", response.data.items);
       })["catch"](function (error) {});
     }
   },
@@ -2206,7 +2207,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    this.$store.commit("UPDATE_MESSAGES", []);
+    this.$store.commit("UPDATE_MESSAGES", {});
   },
   methods: {
     submit: function submit() {
@@ -2304,6 +2305,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2316,24 +2320,39 @@ __webpack_require__.r(__webpack_exports__);
       success: ''
     };
   },
+  mounted: function mounted() {
+    this.$store.commit("UPDATE_MESSAGES", {});
+  },
   methods: {
     submit: function submit() {
       var _this = this;
 
       this.errors = {};
       window.axios.post('/user/account/update-password', this.fields).then(function (response) {
-        if (response.data.error !== null) {
-          _this.errors = response.data.error;
-        }
+        if (response.data.messages !== undefined) {
+          console.log(response.data.messages);
 
-        if (response.data.success !== null) {
-          _this.success = response.data.success;
+          _this.$store.commit("UPDATE_MESSAGES", response.data.messages);
         }
       })["catch"](function (error) {
         if (error.response.status === 422) {
-          _this.errors = error.response.data.errors || {};
+          var messages = {};
+          messages.errors = [];
+
+          for (var key in error.response.data.errors) {
+            for (var i = error.response.data.errors[key].length - 1; i >= 0; i--) {
+              messages.errors[i] = error.response.data.errors[key][i];
+            }
+          }
+
+          _this.$store.commit("UPDATE_MESSAGES", messages);
         }
       });
+    }
+  },
+  computed: {
+    messages: function messages() {
+      return this.$store.state.messages;
     }
   }
 });
@@ -2964,7 +2983,7 @@ var render = function() {
         }
       },
       [
-        _vm.messages.length !== 0
+        Object.entries(_vm.messages).length !== 0
           ? _c(
               "div",
               [
@@ -3365,7 +3384,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "wall card-container" }, [
-    _vm.messages.length !== 0
+    Object.entries(_vm.messages).length !== 0
       ? _c(
           "div",
           [
@@ -3535,23 +3554,28 @@ var render = function() {
         }
       },
       [
-        this.errors
+        Object.entries(_vm.messages).length !== 0
           ? _c(
               "div",
-              { staticClass: "errors" },
-              _vm._l(this.errors, function(error) {
-                return _c("span", [_vm._v("- " + _vm._s(error))])
-              }),
-              0
+              [
+                _vm._l(_vm.messages.errors, function(error) {
+                  return _c("div", { staticClass: "errors" }, [
+                    _c("span", [_vm._v("- " + _vm._s(error))])
+                  ])
+                }),
+                _vm._v(" "),
+                _vm._l(_vm.messages.success, function(success) {
+                  return _c("div", { staticClass: "errors" }, [
+                    _c(
+                      "span",
+                      { staticStyle: { color: "green", "font-size": "10px" } },
+                      [_vm._v("- " + _vm._s(success))]
+                    )
+                  ])
+                })
+              ],
+              2
             )
-          : _vm._e(),
-        _vm._v(" "),
-        this.success
-          ? _c("div", { staticClass: "errors" }, [
-              _c("span", { staticStyle: { color: "green" } }, [
-                _vm._v("- " + _vm._s(this.success))
-              ])
-            ])
           : _vm._e(),
         _vm._v(" "),
         _c("input", {
@@ -20394,7 +20418,7 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
-    messages: [],
+    messages: {},
     userLoggedIn: false,
     user: {
       email: '',

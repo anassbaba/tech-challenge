@@ -1,6 +1,6 @@
 <template lang="jade">
 	<div class="wall card-container">
-		<div  v-if="messages.length !== 0">
+		<div  v-if="Object.entries(messages).length !== 0">
 			<div class="errors" v-for="error in messages.errors">
 				<span >- {{ error }}</span>
 			</div>
@@ -38,7 +38,7 @@
 			}
 		},
 		mounted(){
-			this.$store.commit("UPDATE_MESSAGES", [])
+			this.$store.commit("UPDATE_MESSAGES", {})
 		},
 		methods: {
 			submit() {

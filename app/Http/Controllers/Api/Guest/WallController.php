@@ -2,17 +2,25 @@
 
 namespace App\Http\Controllers\Api\Guest;
 
-use DB;
+use Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class WallController extends Controller
 {
-    public function index(Request $request)
+	public function index()
+	{
+		return view('static.guest.wall');
+	}
+
+    public function json(Request $request)
     {
-    	if($request->ajax())
-    		return response()->json(DB::table('items')->orderBy('id', 'desc')->paginate(10));
-    	else
-    		return view('static.guest.wall');
+		return $this->response($request, 'wall', [
+			'messages'  => [
+				'errors'    => [],
+				'success'   => []
+			],
+			'items' => Auth::user()->items()->orderBy('id', 'desc')->paginate(10)
+		]);
     }
 }

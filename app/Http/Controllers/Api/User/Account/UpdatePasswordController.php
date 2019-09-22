@@ -7,6 +7,7 @@ use Hash;
 use Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Account\UpdatePassword;
 
 class UpdatePasswordController extends Controller
 {
@@ -15,45 +16,30 @@ class UpdatePasswordController extends Controller
     	return view('static.user.account.update-password');
     }
 
-    public function update(Request $request)
+    public function update(UpdatePassword $request)
     {
     	$user = Auth::user();
 
-        if($request->ajax())
+        if (! Hash::check($request->get('old_password'), $user->password)) 
         {
-            $validator = Validator::make($request->all(), [
-                'old_password'              => 'required',
-                'new_password'              => 'required|min:6|max:255|confirmed',
+            return $this->response($request, 'user/account/update-password', [
+                'messages'  => [
+                    'errors'    => ['Old password not valide.'],
+                    'success'   => []
+                ]
             ]);
-
-
-            if (!$validator->passes()) {
-                return response()->json(['error'=>$validator->errors()->all()]);
-            }
         }
-        else
 
-    	   $validatedData = $request->validate([
-               'old_password'               => 'required',
-        	   'new_password' 				=> 'required|min:6|max:255|confirmed',
-    	   ]);
+        $user->update([
+            'password' => Hash::make($request->get('new_password'))
+        ]);
 
-		if (!Hash::check($request->get('old_password'), $user->password)) 
-		{
-            if($request->ajax())
-                return response()->json(['error' => ['old password not valide.']]);
-            else
-    		  return redirect()->to('user/account/update-password')->with(['error' => 'old password not valide.']);
-		}
-
-		$user->update([
-			'password' => Hash::make($request->get('new_password'))
-		]);
-
-    	if($request->ajax())
-                return response()->json(['success' => 'password updated successfuly.']);
-        else
-    	   return redirect()->to('user/account/update-password')->with(['success' => 'password updated successfuly.']);
+        return $this->response($request, 'user/account/update-password', [
+            'messages'  => [
+                'errors'    => [],
+                'success'   => ['Password updated successfuly.']
+            ]
+        ]);
 
     }
 }
