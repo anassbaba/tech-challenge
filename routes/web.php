@@ -57,7 +57,7 @@ Route::group(['domain' => 'tech-chalange.test' ,'prefix' => '/', 'namespace' => 
 		});
 
 			Route::get('/wall', 'WallController@index')->name('.wall');
-			Route::get('/wall/json', 'WallController@index')->name('.wall.json');
+			Route::get('/wall/json', 'WallController@json')->name('.wall.json');
 			Route::get('/logout', 'LoginController@logout')->name('.logout');
 
 	});

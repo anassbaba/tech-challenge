@@ -20,7 +20,7 @@ class AllController extends Controller
 				'errors'    => [],
 				'success'   => []
 			],
-			'items' => Auth::user()->items()->orderBy('id', 'desc')->paginate(10)
+			'items' => Auth::user()->items()->orderBy('id', 'desc')->paginate(5)
 		]);
 	}
 }

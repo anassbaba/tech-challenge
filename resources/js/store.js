@@ -34,27 +34,24 @@ export const store = new Vuex.Store({
         UPDATE_WALL(state, value) {
             if(state.wall.data.length == 0){
                 state.wall = value
-            }
-            else{
+            }else if(state.wall.total > state.wall.data.length) {
                 for (var i = value.data.length - 1; i >= 0; i--) {
                     state.wall.data.push(value.data[i])
                 }
             }
 
             state.wall.total        = value.total; 
-            state.wall.last_page        = value.last_page; 
-            state.wall.current_page = value.current_page; 
+            state.wall.last_page    = value.last_page; 
+            state.wall.current_page = value.current_page;
         },
         UPDATE_USER_ITEMS(state, value) {
-            if(value == 'remove'){
-                state.user.items.data = []
-                return;
+            if((typeof value) === "number"){
+                state.user.items.data.splice(value, 1)
             }
 
-            if(state.user.items.data.length == 0){
+            if(state.user.items.data.length <= 0){
                 state.user.items = value
-            }
-            else{
+            }else if(state.user.items.total > state.user.items.data.length){
                 for (var i = value.data.length - 1; i >= 0; i--) {
                     state.user.items.data.push(value.data[i])
                 }

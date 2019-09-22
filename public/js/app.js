@@ -2024,7 +2024,7 @@ __webpack_require__.r(__webpack_exports__);
       pagesEnd: false
     };
   },
-  created: function created() {
+  mounted: function mounted() {
     var _this = this;
 
     this.loadItems(false);
@@ -2052,7 +2052,7 @@ __webpack_require__.r(__webpack_exports__);
         current_page = current_page + 1;
       }
 
-      window.axios.get('/wall?page=' + current_page).then(function (response) {
+      window.axios.get('/wall/json?page=' + current_page).then(function (response) {
         if (current_page >= _this2.$store.state.wall.last_page) _this2.pagesEnd = true;
         _this2.loading = false;
 
@@ -2114,9 +2114,8 @@ __webpack_require__.r(__webpack_exports__);
     document.addEventListener('scroll', function (e) {
       var bottomOfWindow = window.innerHeight + window.scrollY >= document.body.offsetHeight;
 
-      if (bottomOfWindow && !_this.loading && !_this.pagesEnd) {
+      if (bottomOfWindow && !_this.loading && !_this.pagesEnd && _this.$route.path == '/item-all') {
         _this.loading = false;
-        console.log('body.scrollTop');
 
         _this.loadItems(true);
       }
@@ -2145,9 +2144,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       window.axios.get('/user/item/remove/' + itemId).then(function (response) {
-        _this3.$store.commit("UPDATE_USER_ITEMS", 'remove');
-
-        _this3.loadItems(false);
+        _this3.$store.commit("UPDATE_USER_ITEMS", index);
       })["catch"](function (error) {});
     }
   },
@@ -3246,7 +3243,7 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm._l(_vm.items, function(item) {
+      _vm._l(this.$store.state.wall.data, function(item) {
         return _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-info" }, [
             _c("span", { staticClass: "id" }, [
@@ -3307,7 +3304,8 @@ var render = function() {
     "div",
     { staticClass: "wall" },
     [
-      this.$store.state.user.items.total === 0
+      this.$store.state.user.items.data == undefined ||
+      this.$store.state.user.items.total == 0
         ? _c("b", { staticStyle: { "text-align": "center", color: "gray" } }, [
             _vm._v("You have no items.")
           ])
@@ -20447,7 +20445,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
     UPDATE_WALL: function UPDATE_WALL(state, value) {
       if (state.wall.data.length == 0) {
         state.wall = value;
-      } else {
+      } else if (state.wall.total > state.wall.data.length) {
         for (var i = value.data.length - 1; i >= 0; i--) {
           state.wall.data.push(value.data[i]);
         }
@@ -20458,14 +20456,13 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
       state.wall.current_page = value.current_page;
     },
     UPDATE_USER_ITEMS: function UPDATE_USER_ITEMS(state, value) {
-      if (value == 'remove') {
-        state.user.items.data = [];
-        return;
+      if (typeof value === "number") {
+        state.user.items.data.splice(value, 1);
       }
 
-      if (state.user.items.data.length == 0) {
+      if (state.user.items.data.length <= 0) {
         state.user.items = value;
-      } else {
+      } else if (state.user.items.total > state.user.items.data.length) {
         for (var i = value.data.length - 1; i >= 0; i--) {
           state.user.items.data.push(value.data[i]);
         }

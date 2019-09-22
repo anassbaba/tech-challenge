@@ -1,7 +1,7 @@
 <template lang="jade">
 	<div class="wall" id="infinite-wall">
 		<b style="text-align: center; color: gray;" v-if="this.$store.state.wall.total === 0">No worldwide items.</b>
-		<div class="card" v-for="item in items" >
+		<div class="card" v-for="item in this.$store.state.wall.data" >
 			<div class="card-info">
 				<span class="id">id: {{ item.id }}</span>
 				<span class="date">{{ item.created_at }}</span>
@@ -24,7 +24,7 @@
 				pagesEnd: false,
 			}
 		},
-		created() {
+		mounted() {
 			this.loadItems(false);
 
 			const listElm = document.getElementsByTagName("body")[0];
@@ -50,7 +50,7 @@
 					current_page = current_page + 1
 				}
 
-				window.axios.get('/wall?page=' + current_page).then(response => 
+				window.axios.get('/wall/json?page=' + current_page).then(response => 
 				{
 					if(current_page >= this.$store.state.wall.last_page)
 						this.pagesEnd = true

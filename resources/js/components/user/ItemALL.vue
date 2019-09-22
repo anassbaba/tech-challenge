@@ -1,6 +1,6 @@
 <template lang="jade">
 	<div class="wall"">
-		<b style="text-align: center; color: gray;" v-if="this.$store.state.user.items.total === 0">You have no items.</b>
+		<b style="text-align: center; color: gray;" v-if="this.$store.state.user.items.data == undefined || this.$store.state.user.items.total == 0">You have no items.</b>
 		
 		<div class="card" v-for="(item, index) in items">
 			<div class="card-info">
@@ -35,10 +35,9 @@
 
 				let bottomOfWindow = ((window.innerHeight + window.scrollY)) >= document.body.offsetHeight
 
-				if(bottomOfWindow && !this.loading && !this.pagesEnd) 
+				if(bottomOfWindow && !this.loading && !this.pagesEnd && this.$route.path == '/item-all') 
 				{
 					this.loading = false
-					console.log('body.scrollTop')
 					this.loadItems(true);
 				}
 			});
@@ -67,9 +66,8 @@
 			{
 				window.axios.get('/user/item/remove/' + itemId).then(response => 
 				{   
-					this.$store.commit("UPDATE_USER_ITEMS", 'remove')
-					this.loadItems(false);
-
+					this.$store.commit("UPDATE_USER_ITEMS", index)
+					
 				}).catch(error => {});
 			}
 		},
